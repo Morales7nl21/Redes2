@@ -32,7 +32,7 @@ void imprime(const int *arreglo, int tam)
 {
   int cont = 0;
   for (int i = 0; i < tam; i++){
-    printf("%i, ", arreglo[i]);
+    printf("%i ", arreglo[i]);
     //cont ++;
   }
   //printf("\n\n TOTAL [%d]\n\n",cont);
@@ -41,7 +41,7 @@ void muestra_rango(const int *arreglo)
 {
   while (*arreglo)
   {
-    printf("%i,", *(arreglo++));
+    printf("%i ", *(arreglo++));
   }
 }
 
@@ -109,4 +109,11 @@ void muestra_rangos(int n, int value){
   }
   printf("\n----------------------------------------\n\n");
   printf("\n");
+}
+void crea_archivo(const int *arreglo,const int tam, FILE *p){
+	p=fopen("arreglo_ordenado.txt","a");
+	for(int j=0;j<tam;j++){
+	    fprintf(p,"%d ", arreglo[j]);
+	}
+	fclose(p);
 }

@@ -20,6 +20,6 @@ int main(int argc, char **argv)
   printf("\n[+] Los hilos a crear son: %d y el tama?o del arreglo elegido es de: %d\n\n", hilos, tam_arreglo);
   muestra_rangos(hilos,999);
   crea_hilos(hilos, tam_arreglo);
-  
+  printf("\n[+] Se ha creado un archivo .txt con el nombre: resultadohilos");
   return 0;
 }
