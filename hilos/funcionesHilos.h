@@ -30,7 +30,8 @@ void *funcion_hilo(void *args)
                 error_c(error, "pthread_setcancelstate");
 
             pthread_cleanup_push(thread_cleanup_handler, args);
-            qsort(cuerpo_hilo->arr, cuerpo_hilo->tam, sizeof(int), compara_enteros);
+            imprime(cuerpo_hilo->arr, cuerpo_hilo->tam);
+	    qsort(cuerpo_hilo->arr, cuerpo_hilo->tam, sizeof(int), compara_enteros);
             //printf("\nEL hilo: %d\n", cuerpo_hilo->idx);
             //printf("\nEl tam del hilo fue de  %d: \n", cuerpo_hilo->tam);
 	    //fwrite(cuerpo_hilo->arr, sizeof(int), cuerpo_hilo->tam , cuerpo_hilo->ptfile);
@@ -63,7 +64,7 @@ void crea_hilos(int num_hilos, const int tam_arreglo)
     pthread_t threads[num_hilos];
     pthread_attr_t estado_attr[num_hilos];
     struct_hilo cuerpo_hilo[num_hilos];
-
+   // imprime(arreglo_random,tam_arreglo);
     crea_arreglo_random(arreglo_random, tam_arreglo);
 
     for (i = 0; i < num_hilos; i++)
