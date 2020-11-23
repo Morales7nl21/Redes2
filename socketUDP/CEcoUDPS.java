@@ -13,9 +13,6 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import javax.swing.JOptionPane;
-import java.util.Arrays.*;
-import java.util.List;
 
 public class CEcoUDPS {
 
@@ -23,76 +20,75 @@ public class CEcoUDPS {
         try {
             //datagra,socket sirve pa cliente y servidor
             DatagramSocket cl = new DatagramSocket();
+            String mensaje = "";
             //Mensaje a enviar
-            System.out.print("Cliente iniciado, escriba un mensaje de saludo:");
+
             //Se crea el  buffer para el dato a enviar
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            String mensaje = br.readLine();
-            byte[] b = mensaje.getBytes();
+            //String mensaje = br.readLine();
+            
+            int pto = 2000;
+            String dst = "127.0.0.1";
 
-            if (b.length > 20) {
-                //ArrayList<byte[]> list2 = ArrayUtil.splitArray(b, 20);
-                ArrayList<byte[]> list = new ArrayList<byte[]>();
+            while (true) {
+                System.out.print("Cliente iniciado, escriba un mensaje de saludo:");
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                mensaje = br.readLine();
+                byte[] b = mensaje.getBytes();
                 
-                
-                int numero_paquetes = b.length / 20;
-                float numero_paquetes_aux = (float) b.length / 20;
+                if (b.length > 20) {
+                    ArrayList<byte[]> list = new ArrayList<byte[]>();
+                    int numero_paquetes = b.length / 20, bandera_paquete = 0, k = 0;
+                    float numero_paquetes_aux = (float) b.length / 20;
 
-                System.out.println(b.length);
-                System.out.println(numero_paquetes);
-                System.out.println(b.length / 20);
-                int bandera_paquete = 0;
-                int k = 0;
-
-                if (numero_paquetes_aux > (float) numero_paquetes) {
-                    numero_paquetes++;
-                    bandera_paquete = b.length % 20;
-                    System.out.println(bandera_paquete);
-                }
-                if (bandera_paquete != 0) {
-                    for (int i = 0; i < numero_paquetes; i++) {
-                        if (i == numero_paquetes - 1) {
-                            //byte[] arregloBaux = new byte[20];
-                            //System.arraycopy(b, 0 + k, arregloBaux, 0, bandera_paquete);
-                            //list.add(arregloBaux);
-                            list.add((byte []) Arrays.copyOfRange(b, k, k+bandera_paquete));
-                        } else {
-                            byte[] arregloBaux = new byte[20];
-                            System.arraycopy(b, 0 + k, arregloBaux, 0, 20);                            
-                            list.add(arregloBaux);
+                    if (numero_paquetes_aux > (float) numero_paquetes) {
+                        numero_paquetes++;
+                        bandera_paquete = b.length % 20;
+                    }
+                    if (bandera_paquete != 0) {
+                        for (int i = 0; i < numero_paquetes; i++) {
+                            if (i == numero_paquetes - 1) {
+                                list.add((byte[]) Arrays.copyOfRange(b, k, k + bandera_paquete));
+                            } else {
+                                byte[] arregloBaux = new byte[20];
+                                System.arraycopy(b, 0 + k, arregloBaux, 0, 20);
+                                list.add(arregloBaux);
+                            }
+                            k += 20;
                         }
-                        k += 20;
+                    } else {
+                        for (int i = 0; i < numero_paquetes; i++) {
+                            byte[] arregloBaux = new byte[20];
+                            System.arraycopy(b, 0 + k, arregloBaux, 0, 20);
+                            list.add(arregloBaux);
+                            k += 20;
+                        }
                     }
 
-                } else {
                     for (int i = 0; i < numero_paquetes; i++) {
-                        byte[] arregloBaux = new byte[20];
-                        System.arraycopy(b, 0 + k, arregloBaux, 0, 20);
-                        list.add(arregloBaux);
-                        k += 20;
+                        DatagramPacket p = new DatagramPacket(list.get(i), list.get(i).length, InetAddress.getByName(dst), pto);
+                        cl.send(p);
+
                     }
+                    byte[] buffer = new byte[20];
+                    DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
+                    cl.receive(peticion);
 
+                    mensaje = new String(peticion.getData());
+                    System.out.print(mensaje);
+                    //cl.close();
+                } else {
+                    DatagramPacket p = new DatagramPacket(b, b.length, InetAddress.getByName(dst), pto);
+                    cl.send(p);
+                   
+                    byte[] buffer = new byte[20];
+                    DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
+                    cl.receive(peticion);
+                    mensaje = new String(peticion.getData());
+                    System.out.print(mensaje);
+                    
+                    //cl.close();
                 }
-
-                //Prueba de coppiar arreglos
-                //byte[] b2 = new byte[20];
-                //System.arraycopy(b, 0, b2, 0, 20);
-                //list.add(b2);
-                System.out.println(Arrays.toString(list.get(0)));
-                System.out.println(Arrays.toString(list.get(1)));
-                System.out.println(Arrays.toString(list.get(2)));
-                System.out.println(Arrays.toString(b));
-
             }
-
-            //Devuelve el ASCI de cada char de la cadena 
-            //System.out.println(Arrays.toString(b));
-            //System.out.println(b.length);
-            //String dst = "127.0.0.1";
-            //int pto = 2000;
-            // DatagramPacket p = new DatagramPacket(b,b.length,InetAddress.getByName(dst),pto);
-            // cl.send(p);
-            // cl.close();
         } catch (Exception e) {
             e.printStackTrace();
         }//catch
