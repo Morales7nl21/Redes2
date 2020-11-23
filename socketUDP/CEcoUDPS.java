@@ -21,20 +21,17 @@ public class CEcoUDPS {
             //datagra,socket sirve pa cliente y servidor
             DatagramSocket cl = new DatagramSocket();
             String mensaje = "";
-            //Mensaje a enviar
-
-            //Se crea el  buffer para el dato a enviar
-            //String mensaje = br.readLine();
-            
             int pto = 2000;
             String dst = "127.0.0.1";
 
-            while (true) {
-                System.out.print("Cliente iniciado, escriba un mensaje de saludo:");
+            while (!mensaje.equals("fin")) {
+
+                System.out.print("Cliente iniciado, escriba el mensaje: ");
+
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 mensaje = br.readLine();
                 byte[] b = mensaje.getBytes();
-                
+
                 if (b.length > 20) {
                     ArrayList<byte[]> list = new ArrayList<byte[]>();
                     int numero_paquetes = b.length / 20, bandera_paquete = 0, k = 0;
@@ -63,31 +60,42 @@ public class CEcoUDPS {
                             k += 20;
                         }
                     }
+                    String tamP = String.valueOf(b.length);
+                    DatagramPacket tam = new DatagramPacket(tamP.getBytes(), tamP.length(), InetAddress.getByName(dst), pto);
+                    cl.send(tam);
 
                     for (int i = 0; i < numero_paquetes; i++) {
+
                         DatagramPacket p = new DatagramPacket(list.get(i), list.get(i).length, InetAddress.getByName(dst), pto);
                         cl.send(p);
 
                     }
-                    byte[] buffer = new byte[20];
-                    DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
-                    cl.receive(peticion);
-
-                    mensaje = new String(peticion.getData());
-                    System.out.print(mensaje);
                     //cl.close();
                 } else {
+                    String tamP = String.valueOf(b.length);
+                    DatagramPacket tam = new DatagramPacket(tamP.getBytes(), tamP.length(), InetAddress.getByName(dst), pto);
+                    cl.send(tam);
+                    
                     DatagramPacket p = new DatagramPacket(b, b.length, InetAddress.getByName(dst), pto);
                     cl.send(p);
-                   
+                    //cl.close();
+                }
+                String mensajeN = "";
+                while (!mensajeN.equals("fin")) {
                     byte[] buffer = new byte[20];
                     DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
                     cl.receive(peticion);
-                    mensaje = new String(peticion.getData());
-                    System.out.print(mensaje);
-                    
-                    //cl.close();
+                    mensajeN = new String(peticion.getData());
+                    System.out.print("Servidor:" + mensaje);
+                    if (!mensajeN.equals("fin")) {
+                        mensajeN = "";
+                        break;
+                    } else {
+
+                        cl.close();
+                    }
                 }
+                System.out.println("");
             }
         } catch (Exception e) {
             e.printStackTrace();
