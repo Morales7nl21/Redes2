@@ -21,15 +21,18 @@ public class CEcoTCPNB {
     public static void main(String[] args) {
         try {
 
-            String dir = "127.0.0.1";
-            int pto = 9999;
+            String dir = "127.0.0.1", nameImg = "imagen";
+            int pto = 9000;
             ByteBuffer b1 = null, b2 = null;
             InetSocketAddress dst = new InetSocketAddress(dir, pto);
             //se crea el socketchanel
             SocketChannel cl = SocketChannel.open();
             boolean pedirarchivos = true, verificararchivos = false;
-            int correctosArchivos = 0;
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            int correctosArchivos = 0;           
+            boolean solicitudEspera=false;
+            int contC=0;
+            File directorio;
+            
             //lo hacemos no bloqueante
             cl.configureBlocking(false);
             //Creamos selector
@@ -56,7 +59,9 @@ public class CEcoTCPNB {
                         //Aseguramos que el handshake termino
                         if (ch.isConnectionPending()) {
                             System.out.println("Estableciendo conexion con el servidor... espere..");
-                            try {
+                             directorio = new File("C:\\Users\\LENOVO 720\\Desktop\\IPN Documents\\6toSemestre\\Redes\\RMI\\examen2Redes\\Clientes\\" +String.valueOf(contC));
+                             directorio.mkdir(); 
+                             try {
                                 ch.finishConnect();
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -70,51 +75,64 @@ public class CEcoTCPNB {
                     }//if
                     //Ya no solo aceptamos sino podemos tener eventos de lectura y escritura por la linea 63
                     //el servidor envio respuesta AQUI ya los eventos recurrieron
-                    if (k.isReadable()) {
-                        //vemos en que canal ocurrio
-                        SocketChannel ch = (SocketChannel) k.channel();
-                        //Creamso buffer
-                        if (verificararchivos/* && correctosArchivos < 21*/) {
-                            Path path = Paths.get("C:\\Users\\LENOVO 720\\Desktop\\IPN Documents\\6toSemestre\\Redes\\RMI\\examen2Redes\\Clientes\\123.jpg");
+                    if (k.isReadable()) {                        
+                        SocketChannel ch = (SocketChannel) k.channel();                        
+                        if (verificararchivos && correctosArchivos < 21) {
+                            nameImg = "imagen" + String.valueOf(correctosArchivos)+".jpg";
+                            Path path = Paths.get("C:\\Users\\LENOVO 720\\Desktop\\IPN Documents\\6toSemestre\\Redes\\RMI\\examen2Redes\\Clientes\\"+String.valueOf(contC)+"\\" + nameImg);
                             FileChannel fileChannel = FileChannel.open(path, EnumSet.of(
                                     StandardOpenOption.CREATE,
                                     StandardOpenOption.TRUNCATE_EXISTING,
                                     StandardOpenOption.WRITE)
-                            );
-
-                            ByteBuffer buffer = ByteBuffer.allocate(1024);
+                            );                           
+                            ByteBuffer buffer = ByteBuffer.allocate(1024*500);
                             buffer.clear();
                             while (ch.read(buffer) > 0) {
-                                buffer.flip();//No sé bien que hace
+                                buffer.flip();
                                 fileChannel.write(buffer);
-                                buffer.clear();
+                                //buffer.clear();
+                                buffer.compact();
                             }
+                            
                             fileChannel.close();
-                            System.out.println("Recivido de manera exitosa");
-                            verificararchivos = false;
-                            k.interestOps(SelectionKey.OP_WRITE);
+                            System.out.println("Recivido de manera exitosa");                            
+                            if(correctosArchivos == 20){
+                                pedirarchivos = false;
+                                solicitudEspera=true;
+                            }
+                            correctosArchivos++;
+                            
                         }
-
+                        k.interestOps(SelectionKey.OP_WRITE);                                                                                        
                         continue;
                         //aqui hacemos operacion de escribir
                         //AQUI LOS EVENTOS YA OCURRIERON
                     } else if (k.isWritable()) {
                         SocketChannel ch = (SocketChannel) k.channel();
-                        //String datos = "";
-                        //datos = br.readLine();
-                        //Si lo qu se escribio es salir usuario quiere terminar la comunicacion
-                        System.out.println("Pedir archivos: " + pedirarchivos);
-                        if (pedirarchivos) {
-                            String pedir = "solImagenes";
-                            System.out.println("solicitando imagenes: " + pedir);
-                            byte[] envio = pedir.getBytes();
-                            b2 = ByteBuffer.wrap(envio);
-                            ch.write(b2);
-                            verificararchivos = true;
-                            pedirarchivos = false;
-                            k.interestOps(SelectionKey.OP_READ);
-
-                        }//if                                                
+                       
+                        
+                            if (pedirarchivos) {
+                                System.out.println("Pedir archivos: " + pedirarchivos);
+                                String pedir = "solImagenes";
+                                System.out.println("solicitando imagenes: " + pedir);
+                                byte[] envio = pedir.getBytes();
+                                b2 = ByteBuffer.wrap(envio);
+                                ch.write(b2);
+                                verificararchivos = true;                               
+                                k.interestOps(SelectionKey.OP_READ);
+                                    
+                            } else if (solicitudEspera){
+                                System.out.println("Han llegado todas las imagenes: ");
+                                String pedir = "solEspera";
+                                System.out.println("solicitando espera");
+                                byte[] envio = pedir.getBytes();
+                                b2 = ByteBuffer.wrap(envio);
+                                ch.write(b2);
+                                solicitudEspera=false;
+                                k.interestOps(SelectionKey.OP_READ);
+                                
+                            }                                                    
+                        //if                                                
                         continue;
                     } //if
                 }//while   

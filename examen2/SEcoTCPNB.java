@@ -15,21 +15,19 @@ import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 import jdk.dynalink.linker.support.Guards;
 
-public class SEcoTCPNB {
+public class SEcoTCPNB extends Thread {
 
     public static void main(String[] args) {
         try {
             //Variables necesarias para imagenes
-            Path path = null;
-            String nombreImg = "";
-            long sizeFile = 0;
-            File imagen = null;
-            boolean solImg = false;
+           
+            String nombreImg = "";          
+            boolean solImg = false, solEsp = false;
 
             int iteradorImg = 0;
 
             String EECO = "";
-            int pto = 9999;
+            int pto = 9000;
             ServerSocketChannel s = ServerSocketChannel.open();
             s.configureBlocking(false);
             s.socket().bind(new InetSocketAddress(pto));
@@ -58,7 +56,7 @@ public class SEcoTCPNB {
                         System.out.println("Se procedera a enviarle todas las fotos! ");
                         //Se hace el socket no bloqueante para que entren mas clientes
                         cl.configureBlocking(false);
-
+                        iteradorImg=0;
                         // como el cliente tiene su propio socket chanel se vincula su socket chanel al register de aqui
                         // en este caso se hace al de lectura y escritura.
                         cl.register(sel, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
@@ -82,20 +80,18 @@ public class SEcoTCPNB {
                             }
                             System.out.println("Mensaje de " + n + " bytes recibido:" + msj);
                             if (msj.equals("solImagenes")) {
-                                String dir = "C:\\Users\\LENOVO 720\\Desktop\\IPN Documents\\6toSemestre\\Redes\\Nueva carpeta\\2a_evaluacion_2021_1" + "\\imagen1";
-                                path = Paths.get(dir);
-                                System.out.println("Dir: " + dir);
-                                //for (int i = iteradorImg; i < 21; i++) {
-                                //nombreImg = "imagen" + "0";
-                                //imagen = new File(pathImg + nombreImg);
-                                //sizeFile = imagen.length();
-
+                               
                                 solImg = true;
-                                //iteradorImg += 1;
+
                                 k.interestOps(SelectionKey.OP_WRITE);
                                 //}                                
 
-                            } else if (msj.equalsIgnoreCase("SALIR")) {
+                            }else if(msj.equals("solEspera")){
+                                solEsp = true;
+                                System.out.println("Se ha solicitado espera, para saber si jugará solo o contra alguien mas");
+                                k.interestOps(SelectionKey.OP_WRITE);
+                            }
+                            else if (msj.equalsIgnoreCase("SALIR")) {
                                 //Permite agregar un selectionkey a mi lista de eventos y ahora lo vamos a enviar 
                                 //de regreso, como queremos que sea el selector el que ecriba agregamos el write a mi lista de eventos
 
@@ -113,46 +109,45 @@ public class SEcoTCPNB {
                         continue;
 
                     } else if (k.isWritable()) { //Mi socketchanel esta listo para escribir algo y se envie
+                        SocketChannel ch = (SocketChannel) k.channel();
                         try {
-                            //Vemos en que canal ocurrio
-                            SocketChannel ch = (SocketChannel) k.channel();
-
-                            System.out.println("Solicitud: " + solImg);
+                            //System.out.println("Solicitud: " + solImg);
                             if (solImg) {
-                                
-                                
-                                    //toma la imagen de entrada
-                                    Path newPath = Paths.get("C://Users//LENOVO 720//Desktop//IPN Documents//6toSemestre//Redes//Nueva carpeta//2a_evaluacion_2021_1//imagen3.jpg");
+                                //toma la imagen de entrada
+                                if (iteradorImg < 21) {
+                                    nombreImg = "imagen" + String.valueOf(iteradorImg);
+                                    Path newPath = Paths.get("C://Users//LENOVO 720//Desktop//IPN Documents//6toSemestre//Redes//Nueva carpeta//2a_evaluacion_2021_1//" + nombreImg + ".jpg");
                                     System.out.println(newPath);
                                     FileChannel inChannel = FileChannel.open(newPath);
-                                    long size = inChannel.size();
-                                    System.out.println("Size: " + size);
-                                    ByteBuffer buffer = ByteBuffer.allocate(1024);
-                                    //buffer.clear();
+                                    ByteBuffer buffer = ByteBuffer.allocate(1024*500);
+                                    buffer.clear();
                                     while (inChannel.read(buffer) > 0) {
                                         buffer.flip();
                                         ch.write(buffer);
-                                        buffer.clear();
-
+                                        //buffer.clear();
+                                        buffer.compact();
                                     }
-                                    ch.close();
-                                
-                                solImg = false;
-                            } else {
-                                System.out.println("solicitud es null ):");
+                                    inChannel.close();
+                                    
+                                    if (iteradorImg == 20) {
+                                        solImg = false;
+                                    } 
+                                    ++iteradorImg;
+                                }
+                            //k.interestOps(SelectionKey.OP_READ);
+                            }if(solEsp){
+                                String espera = "En espera de si va a jugar solo o contra alguien mas";
+                                byte[] envio = espera.getBytes();
+                                ByteBuffer b2 = ByteBuffer.wrap(envio);
+                                ch.write(b2);
+                                solEsp=false;
+                                k.interestOps(SelectionKey.OP_READ);
                             }
-
-                            //Mandamos a un buffer el mensaje
-                            //ByteBuffer bb = ByteBuffer.wrap(EECO.getBytes());
-                            //Se escribe el mensaje
-                            //ch.write(bb);
-                            //System.out.println("Mensaje de " + EECO.length() + " bytes enviado: " + EECO);
-                            //Borramos nuestro mensaje
-                            //EECO = "";
-                        } catch (IOException io) {
-                        }
+                            
+                        } catch (IOException io) {}                                                     
                         //Si ocurre un error esperamos a una siguiente lectura
                         k.interestOps(SelectionKey.OP_READ);
+                        //ch.close();
                         continue;
                     }//if
                 }//while
