@@ -82,18 +82,20 @@ public class SEcoTCPNB extends Thread {
                             if(msj.equals("solPuerto")){
                                 solPuerto =true;
                                 k.interestOps(SelectionKey.OP_WRITE);
+                                msj="";
                             }
                             if (msj.equals("solImagenes")) {
                                
                                 solImg = true;
 
                                 k.interestOps(SelectionKey.OP_WRITE);
-                                //}                                
+                                msj="";
 
                             }else if(msj.equals("solEspera")){
                                 solEsp = true;
                                 System.out.println("Se ha solicitado espera, para saber si jugará solo o contra alguien mas");
                                 k.interestOps(SelectionKey.OP_WRITE);
+                                msj="";
                             }
                             else if (msj.equalsIgnoreCase("SALIR")) {
                                 //Permite agregar un selectionkey a mi lista de eventos y ahora lo vamos a enviar 
@@ -106,6 +108,7 @@ public class SEcoTCPNB extends Thread {
                                 //Se envia el mensaje de eco si escibimos salir salimso de la conexion
                                 System.out.println("Se llego al final de write en servidor");
                                 EECO = "ECO->" + "";
+                                msj="";
                                 k.interestOps(SelectionKey.OP_WRITE);
                             }//else
                             
@@ -148,13 +151,15 @@ public class SEcoTCPNB extends Thread {
                                     ++iteradorImg;
                                 }
                             //k.interestOps(SelectionKey.OP_READ);
-                            }if(solEsp){
-                                String espera = "En espera de si va a jugar solo o contra alguien mas";
+                            }
+                            if(solEsp && solImg==false && solPuerto==false){
+                                String espera = "Servidor: En espera de si va a jugar solo o contra alguien mas";
+                                
                                 byte[] envio = espera.getBytes();
                                 ByteBuffer b2 = ByteBuffer.wrap(envio);
                                 ch.write(b2);
                                 solEsp=false;
-                                k.interestOps(SelectionKey.OP_READ);
+                                //k.interestOps(SelectionKey.OP_READ);
                             }
                             
                         } catch (IOException io) {}                                                     

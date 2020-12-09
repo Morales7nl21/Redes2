@@ -14,6 +14,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.EnumSet;
 import java.util.Iterator;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 //El cliente puede ser no bloqueante
 
 public class CEcoTCPNB {
@@ -21,7 +22,7 @@ public class CEcoTCPNB {
     public static void main(String[] args) {
         try {
 
-            String dir = "127.0.0.1", nameImg = "imagen", puerto="";
+            String dir = "127.0.0.1", nameImg = "imagen", puerto = "";
             int pto = 9000;
             ByteBuffer b1 = null, b2 = null;
             InetSocketAddress dst = new InetSocketAddress(dir, pto);
@@ -31,9 +32,9 @@ public class CEcoTCPNB {
             boolean pedirarchivos = true, verificararchivos = false;
             int correctosArchivos = 0;
             boolean solicitudEspera = false;
-            boolean verificarPuerto = false, flagDir=true;
+            boolean verificarPuerto = false, flagDir = true, verificarEspera = false;
             int contC = 0;
-            
+            tableroMemorama tm;
 
             //lo hacemos no bloqueante
             cl.configureBlocking(false);
@@ -61,7 +62,7 @@ public class CEcoTCPNB {
                         //Aseguramos que el handshake termino
                         if (ch.isConnectionPending()) {
                             System.out.println("Estableciendo conexion con el servidor... espere..");
-                           
+
                             try {
                                 ch.finishConnect();
                             } catch (Exception e) {
@@ -79,7 +80,7 @@ public class CEcoTCPNB {
                     if (k.isReadable()) {
                         SocketChannel ch = (SocketChannel) k.channel();
                         if (verificarPuerto) {
-                            
+
                             //Creamso buffer
                             b1 = ByteBuffer.allocate(2000);
                             b1.clear();
@@ -91,16 +92,16 @@ public class CEcoTCPNB {
                             System.out.println("Mi puerto es: " + puerto);
                             //se espera si se va a escribir, no lo hace al momento, ESTA LISTO PARA
                             //Este control lo hace el otro socket
-                            verificarPuerto=false;
+                            verificarPuerto = false;
                             //k.interestOps(SelectionKey.OP_WRITE);
 
                         }
                         if (verificararchivos && correctosArchivos < 21 && verificarPuerto == false) {
-                            
-                            if (flagDir){
-                                File  directorio = new File("C:\\Users\\LENOVO 720\\Desktop\\IPN Documents\\6toSemestre\\Redes\\RMI\\examen2Redes\\Clientes\\" + puerto);
+
+                            if (flagDir) {
+                                File directorio = new File("C:\\Users\\LENOVO 720\\Desktop\\IPN Documents\\6toSemestre\\Redes\\RMI\\examen2Redes\\Clientes\\" + puerto);
                                 directorio.mkdir();
-                                flagDir=false;
+                                flagDir = false;
                             }
                             System.out.println("C:\\Users\\LENOVO 720\\Desktop\\IPN Documents\\6toSemestre\\Redes\\RMI\\examen2Redes\\Clientes\\" + puerto);
                             nameImg = "imagen" + String.valueOf(correctosArchivos) + ".jpg";
@@ -128,6 +129,17 @@ public class CEcoTCPNB {
                             correctosArchivos++;
 
                         }
+                        if (verificarEspera) {
+                            String eleccionJuego = JOptionPane.showInputDialog(null, "Escribe (sp) si vas a jugar solo, de ser que quieras jugar con alguien escirbe (mp)");
+                            System.out.println("Cliente: ha elegido jugar " + eleccionJuego);
+                            if (eleccionJuego.equals("sp")) {
+                                tm = new tableroMemorama(false, "C://Users//LENOVO 720//Desktop//IPN Documents//6toSemestre//Redes//RMI//examen2Redes//Clientes//" + puerto);
+                                tm.establecerFondo();
+                                tm.setVisible(true);
+
+                            }
+                            verificarEspera = false;
+                        }
                         k.interestOps(SelectionKey.OP_WRITE);
                         continue;
                         //aqui hacemos operacion de escribir
@@ -145,26 +157,28 @@ public class CEcoTCPNB {
                             verificarPuerto = true;
                             k.interestOps(SelectionKey.OP_READ);
                         }
-                        if (pedirarchivos == true && pedirPuerto == false) {
+                        if (pedirarchivos == true && verificarPuerto == false) {
                             //System.out.println("Pedir archivos: " + pedirarchivos);
                             String pedir = "solImagenes";
-                            
-                            System.out.println("solicitando imagenes: " + pedir + " numero de imagen: " + String.valueOf(contC++));
+
+                            System.out.println("Cliente: solicitando imagenes: " + pedir + " numero de imagen: " + String.valueOf(contC++));
                             byte[] envio = pedir.getBytes();
                             b2 = ByteBuffer.wrap(envio);
                             ch.write(b2);
                             verificararchivos = true;
                             k.interestOps(SelectionKey.OP_READ);
 
-                        } else if (solicitudEspera) {
-                            contC=0;
-                            System.out.println("Han llegado todas las imagenes: ");
+                        }
+                        if (solicitudEspera == true && pedirarchivos == false && pedirPuerto == false) {
+                            contC = 0;
+                            System.out.println("Cliente: Han llegado todas las imagenes: ");
                             String pedir = "solEspera";
-                            System.out.println("solicitando espera");
+                            System.out.println("Cliente: solicitando espera");
                             byte[] envio = pedir.getBytes();
                             b2 = ByteBuffer.wrap(envio);
                             ch.write(b2);
                             solicitudEspera = false;
+                            verificarEspera = true;
                             k.interestOps(SelectionKey.OP_READ);
 
                         }
