@@ -22,7 +22,7 @@ public class SEcoTCPNB extends Thread {
             //Variables necesarias para imagenes
            
             String nombreImg = "";          
-            boolean solImg = false, solEsp = false;
+            boolean solImg = false, solEsp = false, solPuerto=false;
 
             int iteradorImg = 0;
 
@@ -79,6 +79,10 @@ public class SEcoTCPNB extends Thread {
                                 msj = new String(b.array(), 0, n);
                             }
                             System.out.println("Mensaje de " + n + " bytes recibido:" + msj);
+                            if(msj.equals("solPuerto")){
+                                solPuerto =true;
+                                k.interestOps(SelectionKey.OP_WRITE);
+                            }
                             if (msj.equals("solImagenes")) {
                                
                                 solImg = true;
@@ -104,6 +108,7 @@ public class SEcoTCPNB extends Thread {
                                 EECO = "ECO->" + "";
                                 k.interestOps(SelectionKey.OP_WRITE);
                             }//else
+                            
                         } catch (IOException io) {
                         }
                         continue;
@@ -112,7 +117,15 @@ public class SEcoTCPNB extends Thread {
                         SocketChannel ch = (SocketChannel) k.channel();
                         try {
                             //System.out.println("Solicitud: " + solImg);
-                            if (solImg) {
+                            if(solPuerto){
+                                String puerto = String.valueOf(ch.socket().getPort());
+                                byte[] envio = puerto.getBytes();
+                                ByteBuffer b2 = ByteBuffer.wrap(envio);
+                                ch.write(b2);
+                                solPuerto=false;
+                                k.interestOps(SelectionKey.OP_READ);
+                            }
+                            if (solImg==true && solPuerto==false) {
                                 //toma la imagen de entrada
                                 if (iteradorImg < 21) {
                                     nombreImg = "imagen" + String.valueOf(iteradorImg);
