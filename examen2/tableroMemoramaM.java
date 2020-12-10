@@ -65,7 +65,7 @@ public class tableroMemoramaM extends JFrame implements ActionListener {
 
             }
         }
-        revolver(1);
+        revolver(0);
     }
 
     private void revolver(int control) {
@@ -99,6 +99,27 @@ public class tableroMemoramaM extends JFrame implements ActionListener {
             }
             cartas=cartaTemporal;//asigamos a lo que ya desordenamos
 
+        }else{ //Para fines visuales si control == 0 entonces no se revuelve el tablero.
+            int llenar = 0, sig=0;                        
+            Carta cartaTemporal[] = new Carta[40];
+            //Cuando manejemos arreglos de objetos es necesario llenarlo con elementos inicializarlo
+            for (int i = 0; i < cartaTemporal.length; i++) {
+                cartaTemporal[i] = new Carta(0,path+"/imagen0.jpg",-1);
+            }
+            while (llenar<=39) {
+                //Numero entre 0 y 39 que son posiciones de arreglo
+               
+                if (buscarNum(sig, cartaTemporal)) {
+                    cartaTemporal[llenar] = cartas[sig]; //mandamos un al azar
+                    cartaTemporal[llenar].btn = arreglo[llenar]; //Conectamos los botones con el arreglo
+                    llenar++;
+                    sig++;
+                    
+                }
+                
+            }
+            cartas=cartaTemporal;//asigamos a lo que ya desordenamos
+        
         }
     }
     
