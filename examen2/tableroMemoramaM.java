@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
  */
 public class tableroMemoramaM extends JFrame implements ActionListener {
 
-    private int WIDTH_CARD = 80, HEIGHT_CARD = 80;
+    private int WIDTH_CARD = 150, HEIGHT_CARD = 150, FIL_TABLERO = 8, COL_TABLERO = 5;
     JButton arreglo[] = new JButton[40];
     Carta cartas[] = new Carta[40];
     ImageIcon trasera;
@@ -43,16 +43,16 @@ public class tableroMemoramaM extends JFrame implements ActionListener {
     }
 
     private final void iniciarTablero() {
-        this.setSize(415, 680);
+        this.setSize(WIDTH_CARD*FIL_TABLERO+13, HEIGHT_CARD*COL_TABLERO+30);
         this.setTitle("Memorama");
         this.setLayout(null);//Poner componentes donde queramos
         this.setLocationRelativeTo(null);//Pa que se centre
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+        this.setResizable(false);
         int contador = 0;
         //Creamos interfaz gráfica
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < FIL_TABLERO; i++) {
+            for (int j = 0; j < COL_TABLERO; j++) {
                 trasera = new ImageIcon(pruebaFondo);
                 //JOptionPane.showMessageDialog(null, pruebaFondo);                
                 JButton btn = new JButton("", new ImageIcon(trasera.getImage().getScaledInstance(WIDTH_CARD, HEIGHT_CARD, Image.SCALE_SMOOTH))); //Al iniciar el juego por defecto tendran ese fondo
