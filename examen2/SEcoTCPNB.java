@@ -13,6 +13,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import jdk.dynalink.linker.support.Guards;
 
 public class SEcoTCPNB extends Thread {
@@ -132,13 +133,25 @@ public class SEcoTCPNB extends Thread {
                                     Path newPath = Paths.get("C://Users//LENOVO 720//Desktop//IPN Documents//6toSemestre//Redes//Nueva carpeta//2a_evaluacion_2021_1//" + nombreImg + ".jpg");
                                     System.out.println(newPath);
                                     FileChannel inChannel = FileChannel.open(newPath);
-                                    ByteBuffer buffer = ByteBuffer.allocate(1024*10);
+
+                                    //Envio del tam de imagen
+                                    long espera = inChannel.size();
+                                    //JOptionPane.showMessageDialog(null, "Servidor mandando imagen de tam: " + espera);
+                                    byte[] envio = String.valueOf(espera).getBytes();
+                                    ByteBuffer b2 = ByteBuffer.wrap(envio);
+                                    ch.write(b2);
+                                    
+                                    //Envio de la imagen
+                                    ByteBuffer buffer = ByteBuffer.allocate(1024);
                                     buffer.clear();
-                                    while (inChannel.read(buffer) > 0) {
+                                    int c=0;
+                                    while (inChannel.read(buffer) > 0 || c<inChannel.size()) {
+                                        c++;
                                         buffer.flip();
                                         ch.write(buffer);
                                         //buffer.clear();
                                         buffer.compact();
+                                        
                                     }
                                     inChannel.close();
                                     if (iteradorImg == 20) {
