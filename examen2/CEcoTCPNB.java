@@ -34,7 +34,7 @@ public class CEcoTCPNB {
             boolean solicitudEspera = false;
             boolean verificarPuerto = false, flagDir = true, verificarEspera = false;
             int contC = 0;
-            tableroMemorama tm;
+            tableroMemoramaM tm;
 
             //lo hacemos no bloqueante
             cl.configureBlocking(false);
@@ -80,24 +80,15 @@ public class CEcoTCPNB {
                     if (k.isReadable()) {
                         SocketChannel ch = (SocketChannel) k.channel();
                         if (verificarPuerto) {
-
-                            //Creamso buffer
                             b1 = ByteBuffer.allocate(2000);
                             b1.clear();
-                            int n = ch.read(b1);
-                            //se ajusta el buffer
-                            b1.flip();
-                            //se convierte mi buffer a string
+                            int n = ch.read(b1);                          
+                            b1.flip();          
                             puerto = new String(b1.array(), 0, n);
-                            System.out.println("Mi puerto es: " + puerto);
-                            //se espera si se va a escribir, no lo hace al momento, ESTA LISTO PARA
-                            //Este control lo hace el otro socket
-                            verificarPuerto = false;
-                            //k.interestOps(SelectionKey.OP_WRITE);
-
+                            System.out.println("Mi puerto es: " + puerto);                            
+                            verificarPuerto = false;                       
                         }
                         if (verificararchivos && correctosArchivos < 21 && verificarPuerto == false) {
-
                             if (flagDir) {
                                 File directorio = new File("C:\\Users\\LENOVO 720\\Desktop\\IPN Documents\\6toSemestre\\Redes\\RMI\\examen2Redes\\Clientes\\" + puerto);
                                 directorio.mkdir();
@@ -107,11 +98,8 @@ public class CEcoTCPNB {
                             nameImg = "imagen" + String.valueOf(correctosArchivos) + ".jpg";
                             Path path = Paths.get("C:\\Users\\LENOVO 720\\Desktop\\IPN Documents\\6toSemestre\\Redes\\RMI\\examen2Redes\\Clientes\\" + puerto + "\\" + nameImg);
                             FileChannel fileChannel = FileChannel.open(path, EnumSet.of(
-                                    StandardOpenOption.CREATE,
-                                    StandardOpenOption.TRUNCATE_EXISTING,
-                                    StandardOpenOption.WRITE)
-                            );
-                            ByteBuffer buffer = ByteBuffer.allocate(1024 * 500);
+                                StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING,StandardOpenOption.WRITE));
+                            ByteBuffer buffer = ByteBuffer.allocate(1024*10);
                             buffer.clear();
                             while (ch.read(buffer) > 0) {
                                 buffer.flip();
@@ -119,7 +107,6 @@ public class CEcoTCPNB {
                                 //buffer.clear();
                                 buffer.compact();
                             }
-
                             fileChannel.close();
                             System.out.println("Recivido de manera exitosa");
                             if (correctosArchivos == 20) {
@@ -127,14 +114,13 @@ public class CEcoTCPNB {
                                 solicitudEspera = true;
                             }
                             correctosArchivos++;
-
                         }
                         if (verificarEspera) {
                             String eleccionJuego = JOptionPane.showInputDialog(null, "Escribe (sp) si vas a jugar solo, de ser que quieras jugar con alguien escirbe (mp)");
                             System.out.println("Cliente: ha elegido jugar " + eleccionJuego);
                             if (eleccionJuego.equals("sp")) {
-                                tm = new tableroMemorama(false, "C://Users//LENOVO 720//Desktop//IPN Documents//6toSemestre//Redes//RMI//examen2Redes//Clientes//" + puerto);
-                                tm.establecerFondo();
+                                tm = new tableroMemoramaM("C:/Users/LENOVO 720/Desktop/IPN Documents/6toSemestre/Redes/RMI/examen2Redes/Clientes/" + puerto);
+                                
                                 tm.setVisible(true);
 
                             }

@@ -20,9 +20,9 @@ public class SEcoTCPNB extends Thread {
     public static void main(String[] args) {
         try {
             //Variables necesarias para imagenes
-           
-            String nombreImg = "";          
-            boolean solImg = false, solEsp = false, solPuerto=false;
+
+            String nombreImg = "";
+            boolean solImg = false, solEsp = false, solPuerto = false;
 
             int iteradorImg = 0;
 
@@ -56,7 +56,7 @@ public class SEcoTCPNB extends Thread {
                         System.out.println("Se procedera a enviarle todas las fotos! ");
                         //Se hace el socket no bloqueante para que entren mas clientes
                         cl.configureBlocking(false);
-                        iteradorImg=0;
+                        iteradorImg = 0;
                         // como el cliente tiene su propio socket chanel se vincula su socket chanel al register de aqui
                         // en este caso se hace al de lectura y escritura.
                         cl.register(sel, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
@@ -79,25 +79,24 @@ public class SEcoTCPNB extends Thread {
                                 msj = new String(b.array(), 0, n);
                             }
                             System.out.println("Mensaje de " + n + " bytes recibido:" + msj);
-                            if(msj.equals("solPuerto")){
-                                solPuerto =true;
+                            if (msj.equals("solPuerto")) {
+                                solPuerto = true;
                                 k.interestOps(SelectionKey.OP_WRITE);
-                                msj="";
+                                msj = "";
                             }
                             if (msj.equals("solImagenes")) {
-                               
+
                                 solImg = true;
 
                                 k.interestOps(SelectionKey.OP_WRITE);
-                                msj="";
+                                msj = "";
 
-                            }else if(msj.equals("solEspera")){
+                            } else if (msj.equals("solEspera")) {
                                 solEsp = true;
                                 System.out.println("Se ha solicitado espera, para saber si jugará solo o contra alguien mas");
                                 k.interestOps(SelectionKey.OP_WRITE);
-                                msj="";
-                            }
-                            else if (msj.equalsIgnoreCase("SALIR")) {
+                                msj = "";
+                            } else if (msj.equalsIgnoreCase("SALIR")) {
                                 //Permite agregar un selectionkey a mi lista de eventos y ahora lo vamos a enviar 
                                 //de regreso, como queremos que sea el selector el que ecriba agregamos el write a mi lista de eventos
 
@@ -108,34 +107,32 @@ public class SEcoTCPNB extends Thread {
                                 //Se envia el mensaje de eco si escibimos salir salimso de la conexion
                                 System.out.println("Se llego al final de write en servidor");
                                 EECO = "ECO->" + "";
-                                msj="";
+                                msj = "";
                                 k.interestOps(SelectionKey.OP_WRITE);
                             }//else
-                            
+
                         } catch (IOException io) {
                         }
                         continue;
-
                     } else if (k.isWritable()) { //Mi socketchanel esta listo para escribir algo y se envie
                         SocketChannel ch = (SocketChannel) k.channel();
                         try {
                             //System.out.println("Solicitud: " + solImg);
-                            if(solPuerto){
+                            if (solPuerto) {
                                 String puerto = String.valueOf(ch.socket().getPort());
                                 byte[] envio = puerto.getBytes();
                                 ByteBuffer b2 = ByteBuffer.wrap(envio);
                                 ch.write(b2);
-                                solPuerto=false;
+                                solPuerto = false;
                                 k.interestOps(SelectionKey.OP_READ);
                             }
-                            if (solImg==true && solPuerto==false) {
-                                //toma la imagen de entrada
+                            if (solImg == true && solPuerto == false) {
                                 if (iteradorImg < 21) {
                                     nombreImg = "imagen" + String.valueOf(iteradorImg);
                                     Path newPath = Paths.get("C://Users//LENOVO 720//Desktop//IPN Documents//6toSemestre//Redes//Nueva carpeta//2a_evaluacion_2021_1//" + nombreImg + ".jpg");
                                     System.out.println(newPath);
                                     FileChannel inChannel = FileChannel.open(newPath);
-                                    ByteBuffer buffer = ByteBuffer.allocate(1024*500);
+                                    ByteBuffer buffer = ByteBuffer.allocate(1024*10);
                                     buffer.clear();
                                     while (inChannel.read(buffer) > 0) {
                                         buffer.flip();
@@ -144,25 +141,24 @@ public class SEcoTCPNB extends Thread {
                                         buffer.compact();
                                     }
                                     inChannel.close();
-                                    
                                     if (iteradorImg == 20) {
                                         solImg = false;
-                                    } 
+                                    }
                                     ++iteradorImg;
                                 }
-                            //k.interestOps(SelectionKey.OP_READ);
                             }
-                            if(solEsp && solImg==false && solPuerto==false){
+                            if (solEsp && solImg == false && solPuerto == false) {
                                 String espera = "Servidor: En espera de si va a jugar solo o contra alguien mas";
-                                
+
                                 byte[] envio = espera.getBytes();
                                 ByteBuffer b2 = ByteBuffer.wrap(envio);
                                 ch.write(b2);
-                                solEsp=false;
+                                solEsp = false;
                                 //k.interestOps(SelectionKey.OP_READ);
                             }
-                            
-                        } catch (IOException io) {}                                                     
+
+                        } catch (IOException io) {
+                        }
                         //Si ocurre un error esperamos a una siguiente lectura
                         k.interestOps(SelectionKey.OP_READ);
                         //ch.close();
