@@ -82,11 +82,11 @@ public class CEcoTCPNB {
                         if (verificarPuerto) {
                             b1 = ByteBuffer.allocate(2000);
                             b1.clear();
-                            int n = ch.read(b1);                          
-                            b1.flip();          
+                            int n = ch.read(b1);
+                            b1.flip();                            
                             puerto = new String(b1.array(), 0, n);
-                            System.out.println("Mi puerto es: " + puerto);                            
-                            verificarPuerto = false;                       
+                            System.out.println("Mi puerto es: " + puerto);
+                            verificarPuerto = false;
                         }
                         if (verificararchivos && correctosArchivos < 21 && verificarPuerto == false) {
                             if (flagDir) {
@@ -98,10 +98,24 @@ public class CEcoTCPNB {
                             nameImg = "imagen" + String.valueOf(correctosArchivos) + ".jpg";
                             Path path = Paths.get("C:\\Users\\LENOVO 720\\Desktop\\IPN Documents\\6toSemestre\\Redes\\RMI\\examen2Redes\\Clientes\\" + puerto + "\\" + nameImg);
                             FileChannel fileChannel = FileChannel.open(path, EnumSet.of(
-                                StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING,StandardOpenOption.WRITE));
-                            ByteBuffer buffer = ByteBuffer.allocate(1024*10);
+                                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE));
+
+                            //Recivimos el tama?o de la imagen
+                            ByteBuffer tempB = ByteBuffer.allocate(5);
+                            tempB.clear();                            
+                            int n = ch.read(tempB);
+                            //JOptionPane.showMessageDialog(null, "Tama?o antes de codificar: " + String.valueOf(n) );
+                            tempB.flip();
+                            String sizeI = new String(tempB.array(), 0, n);
+                            //JOptionPane.showMessageDialog(null,"Cliente: Tama?o en string despues de decodificar " + sizeI);
+                            
+                            
+                            //Recibimos la image
+                            ByteBuffer buffer = ByteBuffer.allocate(1024);
                             buffer.clear();
-                            while (ch.read(buffer) > 0) {
+                            int auxTamImg = 0;
+                            while (ch.read(buffer) > 0 || auxTamImg < Integer.valueOf(sizeI)) {
+                                auxTamImg++;
                                 buffer.flip();
                                 fileChannel.write(buffer);
                                 //buffer.clear();
@@ -120,7 +134,7 @@ public class CEcoTCPNB {
                             System.out.println("Cliente: ha elegido jugar " + eleccionJuego);
                             if (eleccionJuego.equals("sp")) {
                                 tm = new tableroMemoramaM("C:/Users/LENOVO 720/Desktop/IPN Documents/6toSemestre/Redes/RMI/examen2Redes/Clientes/" + puerto);
-                                
+
                                 tm.setVisible(true);
 
                             }
