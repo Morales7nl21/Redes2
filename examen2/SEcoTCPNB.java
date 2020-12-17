@@ -3,28 +3,36 @@
  *
  * @author LENOVO 720
  */
-import java.awt.image.BufferedImage;
+import java.awt.List;
 import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.Iterator;
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import javax.imageio.ImageIO;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
-import jdk.dynalink.linker.support.Guards;
 
-public class SEcoTCPNB extends Thread {
+public class SEcoTCPNB {
 
     public static void main(String[] args) {
+
         try {
             //Variables necesarias para imagenes
+            Map<String, Integer> map = new HashMap<String, Integer>();
+            ArrayList<Integer> arl = new ArrayList<Integer>();
 
             String nombreImg = "";
-            boolean solImg = false, solEsp = false, solPuerto = false;
-
+            boolean solImg = false, solEsp = false, solPuerto = false, solMult = false, salirC = false;
+            float tiempoFinal = 0;
             int iteradorImg = 0;
 
             String EECO = "";
@@ -36,6 +44,9 @@ public class SEcoTCPNB extends Thread {
             Selector sel = Selector.open();
             //Se liga el server socket al sel
             s.register(sel, SelectionKey.OP_ACCEPT);
+            SocketChannel player1 = null, player2 = null;
+            int contM = 0;
+            String[] parts = null;
             while (true) {
                 //Aqui esperamos a que ocurra un evento
                 sel.select();
@@ -53,7 +64,7 @@ public class SEcoTCPNB extends Thread {
                     if (k.isAcceptable()) {
                         //El selector solo avisa ya es cuestion nuestra hacer el accept
                         SocketChannel cl = s.accept();
-                        System.out.println("Cliente conectado desde" + cl.socket().getInetAddress() + ":" + cl.socket().getPort());
+                        System.out.println("Cliente conectado desde" + cl.socket().getInetAddress() + ":" + cl.socket().getPort()); //Tomo el puert
                         System.out.println("Se procedera a enviarle todas las fotos! ");
                         //Se hace el socket no bloqueante para que entren mas clientes
                         cl.configureBlocking(false);
@@ -79,7 +90,10 @@ public class SEcoTCPNB extends Thread {
                             if (n > 0) {
                                 msj = new String(b.array(), 0, n);
                             }
-                            System.out.println("Mensaje de " + n + " bytes recibido:" + msj);
+                            //System.out.println("Mensaje de " + n + " bytes recibido:" + msj);
+                            if (msj.indexOf("Seg:") != -1) {
+                                parts = msj.split(" ");
+                            }
                             if (msj.equals("solPuerto")) {
                                 solPuerto = true;
                                 k.interestOps(SelectionKey.OP_WRITE);
@@ -97,26 +111,71 @@ public class SEcoTCPNB extends Thread {
                                 System.out.println("Se ha solicitado espera, para saber si jugará solo o contra alguien mas");
                                 k.interestOps(SelectionKey.OP_WRITE);
                                 msj = "";
-                            } else if (msj.equalsIgnoreCase("SALIR")) {
-                                //Permite agregar un selectionkey a mi lista de eventos y ahora lo vamos a enviar 
-                                //de regreso, como queremos que sea el selector el que ecriba agregamos el write a mi lista de eventos
+                            } else if (msj.equals("solMult")) {
+                                System.out.println("Servidor -> cliente ha solicitado juego multijugador:  " + ch.socket().getPort());
+
+                                if (contM == 0) {
+                                    System.out.println("Servidor -> Jugador 1  " + ch.socket().getPort());
+                                    player1 = ch;
+
+                                } else {
+                                    System.out.println("Servidor -> Jugadir 2  " + ch.socket().getPort());
+                                    player2 = ch;
+
+                                    contM = 0;
+                                    solMult = true;
+                                }
+                                contM++;
+                                msj = "";
 
                                 k.interestOps(SelectionKey.OP_WRITE);
-                                ch.close();
-                                // k.cancel();
+
+                            }
+                            if (parts == null) {
                             } else {
-                                //Se envia el mensaje de eco si escibimos salir salimso de la conexion
-                                System.out.println("Se llego al final de write en servidor");
-                                EECO = "ECO->" + "";
-                                msj = "";
-                                k.interestOps(SelectionKey.OP_WRITE);
-                            }//else
+                                if (parts[0].equals("Seg:")) {
+                                    System.out.println(" Tiempo del cliente: " + parts[2] + " segundos: " + parts[1]);
+                                    //JOptionPane.showMessageDialog(null, ((Object)parts[1]).getClass().getSimpleName());
+
+                                    float f = Float.parseFloat(parts[1]);
+                                    map.put(parts[2], (int) f);
+                                    arl.add((int) f);
+                                    Collections.sort(arl);
+                                    if (!arl.isEmpty()){
+                                        arl.forEach((count) -> {
+                                            map.entrySet().stream().filter((entry) -> (Objects.equals(entry.getValue(), count))).forEachOrdered((entry) -> {
+                                                System.out.println("\n Valor: " + count + "de: " + entry.getKey());
+                                            });
+                                        });
+                                    }
+//                                    int valor1 = map.get("valor1");
+//                                    int valorMin = 100;
+//
+//                                    for (Map.Entry<String, Integer> entry : map.entrySet()) {
+//                                        final int valorActual = entry.getValue();
+//
+//                                        if (valorActual < valorMin) {
+//                                            valorMin = valorActual;
+//                                        }
+//                                    }
+
+                                    //System.out.println("Tiempo minimo record minimo hasta ahora ! " + valorMin + " de: " + getKeyFromValue(map, valorMin));
+                                    msj = "";
+                                    parts = null;
+                                    //k.cancel();
+                                    //ch.close();
+                                    //s.close();
+
+                                }
+                            }
+                            k.interestOps(SelectionKey.OP_WRITE);
 
                         } catch (IOException io) {
                         }
                         continue;
                     } else if (k.isWritable()) { //Mi socketchanel esta listo para escribir algo y se envie
                         SocketChannel ch = (SocketChannel) k.channel();
+
                         try {
                             //System.out.println("Solicitud: " + solImg);
                             if (solPuerto) {
@@ -140,18 +199,18 @@ public class SEcoTCPNB extends Thread {
                                     byte[] envio = String.valueOf(espera).getBytes();
                                     ByteBuffer b2 = ByteBuffer.wrap(envio);
                                     ch.write(b2);
-                                    
+
                                     //Envio de la imagen
                                     ByteBuffer buffer = ByteBuffer.allocate(1024);
                                     buffer.clear();
-                                    int c=0;
-                                    while (inChannel.read(buffer) > 0 || c<inChannel.size()) {
+                                    int c = 0;
+                                    while (inChannel.read(buffer) > 0 || c < inChannel.size()) {
                                         c++;
                                         buffer.flip();
                                         ch.write(buffer);
                                         //buffer.clear();
                                         buffer.compact();
-                                        
+
                                     }
                                     inChannel.close();
                                     if (iteradorImg == 20) {
@@ -161,12 +220,33 @@ public class SEcoTCPNB extends Thread {
                                 }
                             }
                             if (solEsp && solImg == false && solPuerto == false) {
-                                String espera = "Servidor: En espera de si va a jugar solo o contra alguien mas";
-
+                                String espera = "aceptado";
+                                System.out.println("SEcoTCPNB.main() -> " + espera);
                                 byte[] envio = espera.getBytes();
                                 ByteBuffer b2 = ByteBuffer.wrap(envio);
                                 ch.write(b2);
                                 solEsp = false;
+                                //k.interestOps(SelectionKey.OP_READ);
+                            }
+
+                            if (solMult && solEsp == false && solImg == false && solPuerto == false) {
+                                String espera1 = "Acceptado P1";
+                                ByteBuffer p1B = null, p2B = null;
+
+                                byte[] envio1 = espera1.getBytes();
+                                p1B = ByteBuffer.wrap(envio1);
+
+                                String espera2 = "Acceptado P2";
+
+                                byte[] envio2 = espera2.getBytes();
+                                p2B = ByteBuffer.wrap(envio2);
+
+                                JOptionPane.showMessageDialog(null, "P1 port: " + player1.socket().getPort() + " P2 port: " + player2.socket().getPort());
+                                player1.write(p1B);
+                                player2.write(p2B);
+                                //ch.write(b2);
+                                solMult = false;
+
                                 //k.interestOps(SelectionKey.OP_READ);
                             }
 
@@ -183,4 +263,13 @@ public class SEcoTCPNB extends Thread {
             e.printStackTrace();
         }//catch
     }//main
+
+//    public static Object getKeyFromValue(Map hm, Object value) {
+//        for (Object o : hm.keySet()) {
+//            if (hm.get(o).equals(value)) {
+//                return o;
+//            }
+//        }
+//        return null;
+//    }
 }
