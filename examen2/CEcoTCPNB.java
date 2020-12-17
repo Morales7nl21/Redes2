@@ -3,7 +3,6 @@
  *
  * @author LENOVO 720
  */
-import java.awt.image.BufferedImage;
 import java.nio.channels.*;
 import java.io.*;
 import java.net.*;
@@ -13,53 +12,53 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.EnumSet;
 import java.util.Iterator;
-import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
-//El cliente puede ser no bloqueante
 
 public class CEcoTCPNB {
 
-    public static void main(String[] args) {
+    SocketChannel clG;
+    tableroMemoramaM tm;
+    String puerto = "";
+    String[] parts = null;
+
+    public CEcoTCPNB() {
+
+        Cliente();
+    }
+
+    public void Cliente() {
         try {
 
-            String dir = "127.0.0.1", nameImg = "imagen", puerto = "";
+            String dir = "127.0.0.1", nameImg = "imagen";
             int pto = 9000;
             ByteBuffer b1 = null, b2 = null;
             InetSocketAddress dst = new InetSocketAddress(dir, pto);
-            //se crea el socketchanel
+
             SocketChannel cl = SocketChannel.open();
+            clG = cl;
             boolean pedirPuerto = true;
             boolean pedirarchivos = true, verificararchivos = false;
             int correctosArchivos = 0;
             boolean solicitudEspera = false;
-            boolean verificarPuerto = false, flagDir = true, verificarEspera = false;
+            boolean verificarPuerto = false, flagDir = true, verificarEspera = false, solicitudSingle = false, solicitudMulti = false, verificarMulti = false;
             int contC = 0;
-            tableroMemoramaM tm;
 
             //lo hacemos no bloqueante
             cl.configureBlocking(false);
-            //Creamos selector
             Selector sel = Selector.open();
-            //Lo registramos con conect (vamos a establecer conexion)
             cl.register(sel, SelectionKey.OP_CONNECT);
-            //intentamos establecer conexion
             cl.connect(dst);
             while (true) {
-                //Se guarda la lista, el unico evento que puede ocurrir es conect, aqui ya la conexion se realizo
-                //En el momento que exista un evento se hace la lista
                 sel.select();
-                //instancia la iterador
                 Iterator<SelectionKey> it = sel.selectedKeys().iterator();
-                //Recorre la lista
                 while (it.hasNext()) {
                     SelectionKey k = (SelectionKey) it.next();
-                    //eliminamos el evento pero antes se recupera
+
                     it.remove();
                     if (k.isConnectable()) {
 
                         SocketChannel ch = (SocketChannel) k.channel();
-                        //El selectionkey se ejecuta en el momento que la conexion se inicia
-                        //Aseguramos que el handshake termino
+
                         if (ch.isConnectionPending()) {
                             System.out.println("Estableciendo conexion con el servidor... espere..");
 
@@ -75,15 +74,14 @@ public class CEcoTCPNB {
                         ch.register(sel, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
                         continue;
                     }//if
-                    //Ya no solo aceptamos sino podemos tener eventos de lectura y escritura por la linea 63
-                    //el servidor envio respuesta AQUI ya los eventos recurrieron
                     if (k.isReadable()) {
                         SocketChannel ch = (SocketChannel) k.channel();
+
                         if (verificarPuerto) {
                             b1 = ByteBuffer.allocate(2000);
                             b1.clear();
                             int n = ch.read(b1);
-                            b1.flip();                            
+                            b1.flip();
                             puerto = new String(b1.array(), 0, n);
                             System.out.println("Mi puerto es: " + puerto);
                             verificarPuerto = false;
@@ -102,15 +100,11 @@ public class CEcoTCPNB {
 
                             //Recivimos el tama?o de la imagen
                             ByteBuffer tempB = ByteBuffer.allocate(5);
-                            tempB.clear();                            
+                            tempB.clear();
                             int n = ch.read(tempB);
                             //JOptionPane.showMessageDialog(null, "Tama?o antes de codificar: " + String.valueOf(n) );
                             tempB.flip();
                             String sizeI = new String(tempB.array(), 0, n);
-                            //JOptionPane.showMessageDialog(null,"Cliente: Tama?o en string despues de decodificar " + sizeI);
-                            
-                            
-                            //Recibimos la image
                             ByteBuffer buffer = ByteBuffer.allocate(1024);
                             buffer.clear();
                             int auxTamImg = 0;
@@ -133,13 +127,59 @@ public class CEcoTCPNB {
                             String eleccionJuego = JOptionPane.showInputDialog(null, "Escribe (sp) si vas a jugar solo, de ser que quieras jugar con alguien escirbe (mp)");
                             System.out.println("Cliente: ha elegido jugar " + eleccionJuego);
                             if (eleccionJuego.equals("sp")) {
-                                tm = new tableroMemoramaM("C:/Users/LENOVO 720/Desktop/IPN Documents/6toSemestre/Redes/RMI/examen2Redes/Clientes/" + puerto);
+
+                                ByteBuffer b = ByteBuffer.allocate(2000);
+                                b.clear();
+                                int n = ch.read(b);
+                                b1.flip();
+                                String solS = new String(b.array(), 0, n);
+                                System.out.println("Cliente -> Aceptado Servidor: " + solS);
+                                //JOptionPane.showMessageDialog(null, solS);
+
+                                tm = new tableroMemoramaM("C:/Users/LENOVO 720/Desktop/IPN Documents/6toSemestre/Redes/RMI/examen2Redes/Clientes/" + puerto, this);
 
                                 tm.setVisible(true);
+                                //wait(10000);
+                                //tm.destapar(5); Destapamos un carta
+
+                            } else if (eleccionJuego.equals("mp")) {
+                                ByteBuffer b = ByteBuffer.allocate(2000);
+                                b.clear();
+                                int n = ch.read(b);
+                                b1.flip();
+                                String solS = new String(b.array(), 0, n);
+                                System.out.println("Cliente Espera -> Servidor: " + solS);
+                                solicitudMulti = true;
+                                //JOptionPane.showMessageDialog(null, solS);
 
                             }
                             verificarEspera = false;
                         }
+                        if (verificarMulti) {
+                            ByteBuffer b = ByteBuffer.allocate(2000);
+                            b.clear();
+                            int n = ch.read(b);
+                            b1.flip();
+                            String solS = new String(b.array(), 0, n);
+                            if (solS.indexOf("Acceptado") != -1) {
+                                parts = solS.split(" ");
+                            }
+                            System.out.println("Cliente Multijugador -> Servidor: " + solS);
+                            if (parts == null) {
+                            } else {
+                                if (parts[1].equals("P1")) {
+                                    JOptionPane.showMessageDialog(null, "Serás el jugador 1, puerto: " + puerto);
+
+                                    generarTablero();
+                                } else if (parts[1].equals("P2")) {
+                                     JOptionPane.showMessageDialog(null, "Serás el jugador 2, puerto:  "+ puerto);
+                                     generarTablero();
+                                }
+                                parts = null;
+                            }
+                            verificarMulti = false;
+                        }
+
                         k.interestOps(SelectionKey.OP_WRITE);
                         continue;
                         //aqui hacemos operacion de escribir
@@ -170,7 +210,7 @@ public class CEcoTCPNB {
 
                         }
                         if (solicitudEspera == true && pedirarchivos == false && pedirPuerto == false) {
-                            contC = 0;
+
                             System.out.println("Cliente: Han llegado todas las imagenes: ");
                             String pedir = "solEspera";
                             System.out.println("Cliente: solicitando espera");
@@ -179,6 +219,17 @@ public class CEcoTCPNB {
                             ch.write(b2);
                             solicitudEspera = false;
                             verificarEspera = true;
+                            k.interestOps(SelectionKey.OP_READ);
+
+                        }
+                        if (solicitudMulti == true && solicitudEspera == false && pedirarchivos == false && pedirPuerto == false) {
+                            String pedir = "solMult";
+                            //System.out.println("Cliente: solicitando multijuego");
+                            byte[] envio = pedir.getBytes();
+                            b2 = ByteBuffer.wrap(envio);
+                            ch.write(b2);
+                            solicitudMulti = false;
+                            verificarMulti = true;
                             k.interestOps(SelectionKey.OP_READ);
 
                         }
@@ -191,5 +242,28 @@ public class CEcoTCPNB {
             e.printStackTrace();
         }//catch
 
-    }//main
+    }//cliente
+
+    public void mandaBoton(int btn) {
+        //JOptionPane.showMessageDialog(null, "Boton recibido" + String.valueOf(btn));
+
+    }
+
+    public void generarTablero() {
+
+        tm = new tableroMemoramaM("C:/Users/LENOVO 720/Desktop/IPN Documents/6toSemestre/Redes/RMI/examen2Redes/Clientes/" + puerto, this);
+        tm.setVisible(true);
+    }
+
+    void mandaTiempo(String cadena) throws IOException {
+        ByteBuffer btf = null;
+
+        String tiempo = "Seg: " + cadena;
+        byte[] envio = tiempo.getBytes();
+        btf = ByteBuffer.wrap(envio);
+        clG.write(btf);
+        //clG.close();
+        System.exit(0);
+        //JOptionPane.showMessageDialog(null, "Boton recibido" + String.valueOf(seg));
+    }
 }
