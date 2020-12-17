@@ -28,7 +28,7 @@ class Carta {
         this.posicion=posicion;
         img=new ImageIcon(nombre);//Cargamos una imagen
         try {            
-            img = new ImageIcon(img.getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT));
+            img = new ImageIcon(img.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
         } catch (Exception e) {
             System.err.println(e);
         }
