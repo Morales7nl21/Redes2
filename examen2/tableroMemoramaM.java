@@ -35,13 +35,15 @@ public class tableroMemoramaM extends JFrame implements ActionListener {
     boolean tiempo = true;
     int par = 0;
     public CEcoTCPNB cliente;
+    int tipo = 0;
 
-    public tableroMemoramaM(String path, CEcoTCPNB cliente) {
+    public tableroMemoramaM(String path, CEcoTCPNB cliente, int tipo) {
         this.pruebaFondo = path + "/imagen0.jpg";
         this.cliente = cliente;
         //JOptionPane.showMessageDialog(null,"prueba fondo: " + pruebaFondo);
         this.path = path;
         tmp = new Carta(0, pruebaFondo, 0);
+        this.tipo = tipo;
         iniciarTablero();
     }
 
@@ -145,7 +147,7 @@ public class tableroMemoramaM extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent arg0) {
         for (int i = 0; i < arreglo.length; i++) {
             if (cartas[i].btn == arg0.getSource() && cartas[i].revelado == false) {
-                if (tiempo) {
+                if (tiempo && tipo == 0) {
                     JOptionPane.showConfirmDialog(null, "Aceptar.",
                             "El tiempo corre a partir de ya!", JOptionPane.CLOSED_OPTION,
                             JOptionPane.INFORMATION_MESSAGE);
@@ -154,7 +156,14 @@ public class tableroMemoramaM extends JFrame implements ActionListener {
                     tiempo = false;
 
                 }
-                //cliente.mandaBoton(i); Mandamos el boton
+                if (tipo == 1) {
+                    try {
+                        cliente.mandaBoton(i);
+                        //Mandamos el boton
+                    } catch (IOException ex) {
+                        Logger.getLogger(tableroMemoramaM.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
                 cartas[i].btn.setIcon(cartas[i].img);
                 if (par == 0) {
                     cartas[i].revelado = true;
@@ -176,9 +185,11 @@ public class tableroMemoramaM extends JFrame implements ActionListener {
                             float seg = (time_end - time_start) / 1000;
                             //JOptionPane.showMessageDialog(this, "final : " + time_end);
                             JOptionPane.showMessageDialog(this, "has ganado, tiempo: " + seg);
-                            String nombre=JOptionPane.showInputDialog(null, "Ingresa tu nombre para guardar tu tiempo !");
+                            String nombre = JOptionPane.showInputDialog(null, "Ingresa tu nombre para guardar tu tiempo !");
                             try {
-                                cliente.mandaTiempo(seg+" "+nombre);
+                                if (tipo == 0) {
+                                    cliente.mandaTiempo(seg + " " + nombre);
+                                }
                             } catch (IOException ex) {
                                 Logger.getLogger(tableroMemoramaM.class.getName()).log(Level.SEVERE, null, ex);
                             } finally {

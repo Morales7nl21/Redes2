@@ -20,6 +20,8 @@ public class CEcoTCPNB {
     tableroMemoramaM tm;
     String puerto = "";
     String[] parts = null;
+    String jugador = "";
+    boolean jugando = false;
 
     public CEcoTCPNB() {
 
@@ -33,13 +35,13 @@ public class CEcoTCPNB {
             int pto = 9000;
             ByteBuffer b1 = null, b2 = null;
             InetSocketAddress dst = new InetSocketAddress(dir, pto);
-
+            String eleccionJuego = "";
             SocketChannel cl = SocketChannel.open();
             clG = cl;
             boolean pedirPuerto = true;
             boolean pedirarchivos = true, verificararchivos = false;
             int correctosArchivos = 0;
-            boolean solicitudEspera = false;
+            boolean solicitudEspera = false, verificarJugando = false, banderaSeleccion = true;
             boolean verificarPuerto = false, flagDir = true, verificarEspera = false, solicitudSingle = false, solicitudMulti = false, verificarMulti = false;
             int contC = 0;
 
@@ -65,7 +67,6 @@ public class CEcoTCPNB {
                             try {
                                 ch.finishConnect();
                             } catch (Exception e) {
-                                e.printStackTrace();
                             }//catch
 
                             System.out.println("Conexion establecida...\n");
@@ -123,11 +124,14 @@ public class CEcoTCPNB {
                             }
                             correctosArchivos++;
                         }
-                        if (verificarEspera) {
-                            String eleccionJuego = JOptionPane.showInputDialog(null, "Escribe (sp) si vas a jugar solo, de ser que quieras jugar con alguien escirbe (mp)");
-                            System.out.println("Cliente: ha elegido jugar " + eleccionJuego);
+                        if (verificarEspera && banderaSeleccion) {
+                            int cont = 0;
+                            if(cont == 0){
+                                eleccionJuego = JOptionPane.showInputDialog(null, "Escribe (sp) si vas a jugar solo, de ser que quieras jugar con alguien escirbe (mp)");
+                                cont ++;
+                            }
                             if (eleccionJuego.equals("sp")) {
-
+                                System.out.println("Cliente: ha elegido jugar " + eleccionJuego);
                                 ByteBuffer b = ByteBuffer.allocate(2000);
                                 b.clear();
                                 int n = ch.read(b);
@@ -135,14 +139,16 @@ public class CEcoTCPNB {
                                 String solS = new String(b.array(), 0, n);
                                 System.out.println("Cliente -> Aceptado Servidor: " + solS);
                                 //JOptionPane.showMessageDialog(null, solS);
-
-                                tm = new tableroMemoramaM("C:/Users/LENOVO 720/Desktop/IPN Documents/6toSemestre/Redes/RMI/examen2Redes/Clientes/" + puerto, this);
+                                banderaSeleccion = false;
+                                tm = new tableroMemoramaM("C:/Users/LENOVO 720/Desktop/IPN Documents/6toSemestre/Redes/RMI/examen2Redes/Clientes/" + puerto, this, 0);
 
                                 tm.setVisible(true);
                                 //wait(10000);
                                 //tm.destapar(5); Destapamos un carta
 
                             } else if (eleccionJuego.equals("mp")) {
+                                banderaSeleccion = false;
+                                System.out.println("Cliente: ha elegido jugar " + eleccionJuego);
                                 ByteBuffer b = ByteBuffer.allocate(2000);
                                 b.clear();
                                 int n = ch.read(b);
@@ -169,15 +175,44 @@ public class CEcoTCPNB {
                             } else {
                                 if (parts[1].equals("P1")) {
                                     JOptionPane.showMessageDialog(null, "Serás el jugador 1, puerto: " + puerto);
+                                    jugador = "P1";
 
                                     generarTablero();
                                 } else if (parts[1].equals("P2")) {
-                                     JOptionPane.showMessageDialog(null, "Serás el jugador 2, puerto:  "+ puerto);
-                                     generarTablero();
+                                    JOptionPane.showMessageDialog(null, "Serás el jugador 2, puerto:  " + puerto);
+                                    jugador = "P2";                                    
+                                    generarTablero();
                                 }
                                 parts = null;
                             }
                             verificarMulti = false;
+                            jugando = true;
+                        } else if (verificarJugando) {
+                            ByteBuffer b = ByteBuffer.allocate(20000);
+                            b.clear();
+                            b1.flip();
+                            int n = ch.read(b);
+                            String solS = "";
+                            solS = new String(b.array(), 0, n);
+                            System.out.println("Cliente-> Recibiendo jugada: " + solS);
+                            parts = solS.split(" ");
+                            System.out.println("Destapando carta: " + parts[1]);
+                            destapaCarta(Integer.parseInt(parts[1]));
+                            parts = null;
+//                            if (jugador.equals("P2")) {
+//                               // if (solS.indexOf("P2") != -1) {
+//                                    parts = solS.split(" ");
+//                               // }
+//                                                                                           
+//                            }
+//                            if (jugador.equals("P1")) {
+//                               // if (solS.indexOf("P1") != -1) {
+//                                    parts = solS.split(" ");
+//                                //}
+//                                destapaCarta(Integer.parseInt(parts[1]));                                                                
+//                            }
+                            verificarJugando = false;
+
                         }
 
                         k.interestOps(SelectionKey.OP_WRITE);
@@ -233,6 +268,17 @@ public class CEcoTCPNB {
                             k.interestOps(SelectionKey.OP_READ);
 
                         }
+                        if (jugando && solicitudMulti == false && solicitudEspera == false && pedirarchivos == false && pedirPuerto == false) {
+                            //String pedir = "solJug";
+                            //System.out.println("Cliente: solicitando multijuego");
+                            //byte[] envio = pedir.getBytes();
+                            //b2 = ByteBuffer.wrap(envio);
+                            //ch.write(b2);
+                            jugando = false;
+                            verificarJugando = true;
+                            k.interestOps(SelectionKey.OP_READ);
+
+                        }
                         //if                                                
                         continue;
                     } //if
@@ -244,21 +290,34 @@ public class CEcoTCPNB {
 
     }//cliente
 
-    public void mandaBoton(int btn) {
+    public void mandaBoton(int btn) throws IOException {
         //JOptionPane.showMessageDialog(null, "Boton recibido" + String.valueOf(btn));
+
+        ByteBuffer btf = null;
+        System.out.println("Jugador: " + jugador + " \tBoton presionado: " + btn);
+        String tiempo = "Jugada: " + jugador + " " + btn;
+        byte[] envio = tiempo.getBytes();
+        btf = ByteBuffer.wrap(envio);
+        clG.write(btf);
+        jugando = true;
 
     }
 
     public void generarTablero() {
 
-        tm = new tableroMemoramaM("C:/Users/LENOVO 720/Desktop/IPN Documents/6toSemestre/Redes/RMI/examen2Redes/Clientes/" + puerto, this);
+        tm = new tableroMemoramaM("C:/Users/LENOVO 720/Desktop/IPN Documents/6toSemestre/Redes/RMI/examen2Redes/Clientes/" + puerto, this, 1);
         tm.setVisible(true);
+    }
+
+    public void destapaCarta(int num) {
+        tm.destapar(num);
     }
 
     void mandaTiempo(String cadena) throws IOException {
         ByteBuffer btf = null;
 
         String tiempo = "Seg: " + cadena;
+        System.out.println(tiempo);
         byte[] envio = tiempo.getBytes();
         btf = ByteBuffer.wrap(envio);
         clG.write(btf);

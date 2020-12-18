@@ -3,7 +3,6 @@
  *
  * @author LENOVO 720
  */
-import java.awt.List;
 import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
@@ -14,11 +13,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
 public class SEcoTCPNB {
@@ -31,10 +27,11 @@ public class SEcoTCPNB {
             ArrayList<Integer> arl = new ArrayList<Integer>();
 
             String nombreImg = "";
-            boolean solImg = false, solEsp = false, solPuerto = false, solMult = false, salirC = false;
+            String jugada = "";
+            boolean solImg = false, solEsp = false, solPuerto = false, solMult = false, salirC = false, turnoP1 = false, turnoP2 = false, bandSeg = false, bandJug = false;
             float tiempoFinal = 0;
             int iteradorImg = 0;
-
+            boolean jugada1 = true, jugada2 = false;
             String EECO = "";
             int pto = 9000;
             ServerSocketChannel s = ServerSocketChannel.open();
@@ -90,9 +87,15 @@ public class SEcoTCPNB {
                             if (n > 0) {
                                 msj = new String(b.array(), 0, n);
                             }
-                            //System.out.println("Mensaje de " + n + " bytes recibido:" + msj);
+                            System.out.println("Mensaje de " + n + " bytes recibido:" + msj);
                             if (msj.indexOf("Seg:") != -1) {
                                 parts = msj.split(" ");
+                                bandSeg = true;
+
+                            }
+                            if (msj.indexOf("Jugada:") != -1) {
+                                parts = msj.split(" ");
+                                bandJug=true;
                             }
                             if (msj.equals("solPuerto")) {
                                 solPuerto = true;
@@ -133,41 +136,60 @@ public class SEcoTCPNB {
                             }
                             if (parts == null) {
                             } else {
-                                if (parts[0].equals("Seg:")) {
-                                    System.out.println(" Tiempo del cliente: " + parts[2] + " segundos: " + parts[1]);
-                                    //JOptionPane.showMessageDialog(null, ((Object)parts[1]).getClass().getSimpleName());
 
-                                    float f = Float.parseFloat(parts[1]);
-                                    map.put(parts[2], (int) f);
-                                    arl.add((int) f);
-                                    Collections.sort(arl);
-                                    if (!arl.isEmpty()){
-                                        arl.forEach((count) -> {
-                                            map.entrySet().stream().filter((entry) -> (Objects.equals(entry.getValue(), count))).forEachOrdered((entry) -> {
-                                                System.out.println("\n Valor: " + count + "de: " + entry.getKey());
-                                            });
-                                        });
+                                if (bandSeg) {
+                                    if (parts[0].equals("Seg:")) {
+                                        System.out.println(" Tiempo del cliente: " + parts[2] + " segundos: " + parts[1]);
+                                        //JOptionPane.showMessageDialog(null, ((Object)parts[1]).getClass().getSimpleName());
+
+                                        if (parts[1] != null && !parts[1].equals("")) {
+                                            float f = Float.parseFloat(parts[1]);
+                                            map.put(parts[2], (int) f);
+                                            arl.add((int) f);
+                                            Collections.sort(arl);
+                                            //int tops = 1;
+                                            if (!arl.isEmpty()) {
+                                                arl.forEach((count) -> {
+                                                    map.entrySet().stream().filter((entry) -> (Objects.equals(entry.getValue(), count))).forEachOrdered((entry) -> {                                                        
+                                                        System.out.println("\n\tTiempo: " + count + "\t Hecho por: " + entry.getKey());                                                        
+                                                    });
+                                                });
+                                            }
+
+                                            msj = "";
+                                        }
+                                        parts = null;
+                                        bandSeg = false;
                                     }
-//                                    int valor1 = map.get("valor1");
-//                                    int valorMin = 100;
-//
-//                                    for (Map.Entry<String, Integer> entry : map.entrySet()) {
-//                                        final int valorActual = entry.getValue();
-//
-//                                        if (valorActual < valorMin) {
-//                                            valorMin = valorActual;
-//                                        }
-//                                    }
-
-                                    //System.out.println("Tiempo minimo record minimo hasta ahora ! " + valorMin + " de: " + getKeyFromValue(map, valorMin));
-                                    msj = "";
-                                    parts = null;
-                                    //k.cancel();
-                                    //ch.close();
-                                    //s.close();
 
                                 }
+                                if (bandJug) {
+                                    if (parts[1].equals("P1")) {
+                                        
+                                        turnoP2 = true;
+                                        System.out.println("\nServidor recibió: " + parts[0] + parts[1] + parts[2]);
+                                        jugada = parts[2];
+                                        msj = "";
+                                    } else if (parts[1].equals("P2")) {
+                                        
+                                        turnoP1 = true;
+                                        System.out.println("\nServidor recibió: " + parts[0] + parts[1] + parts[2]);
+                                        jugada = parts[2];
+                                        msj = "";
+
+                                    }
+                                    msj = "";
+                                }
+                                msj = "";
+                                parts=null;
+                                // System.out.println(parts[0] + parts[1] + parts[2]);
+
                             }
+//                            if(msj.equals("solJug")){
+//                                turnoP1=true;
+//                                turnoP2=true;
+//                             msj = "";       
+//                            }
                             k.interestOps(SelectionKey.OP_WRITE);
 
                         } catch (IOException io) {
@@ -241,13 +263,32 @@ public class SEcoTCPNB {
                                 byte[] envio2 = espera2.getBytes();
                                 p2B = ByteBuffer.wrap(envio2);
 
-                                JOptionPane.showMessageDialog(null, "P1 port: " + player1.socket().getPort() + " P2 port: " + player2.socket().getPort());
+                                System.out.println( "P1 port: " + player1.socket().getPort() + " P2 port: " + player2.socket().getPort());
                                 player1.write(p1B);
                                 player2.write(p2B);
                                 //ch.write(b2);
                                 solMult = false;
 
                                 //k.interestOps(SelectionKey.OP_READ);
+                            }
+                            if (turnoP1) {
+                                ByteBuffer p1B = null;
+                                //String moves[] = jugada.split(" ");
+                                System.out.println("Servidor enviando -> " + ("P1 " + jugada));
+                                byte[] envio1 = ("P2 " + jugada).getBytes();                                
+                                p1B = ByteBuffer.wrap(envio1);
+                                player1.write(p1B);
+                                jugada = "";
+                                turnoP1 = false;
+                            }
+                            if (turnoP2) {
+                                ByteBuffer p1B = null;
+                                System.out.println("Servidor enviando -> " + ("P2 " + jugada));
+                                byte[] envio1 = ("P1 " + jugada).getBytes();
+                                p1B = ByteBuffer.wrap(envio1);
+                                player2.write(p1B);
+                                jugada = "";
+                                turnoP2 = false;
                             }
 
                         } catch (IOException io) {
@@ -264,12 +305,4 @@ public class SEcoTCPNB {
         }//catch
     }//main
 
-//    public static Object getKeyFromValue(Map hm, Object value) {
-//        for (Object o : hm.keySet()) {
-//            if (hm.get(o).equals(value)) {
-//                return o;
-//            }
-//        }
-//        return null;
-//    }
 }
