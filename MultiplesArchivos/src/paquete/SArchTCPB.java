@@ -72,7 +72,13 @@ public class SArchTCPB {
                         //System.out.print("\n\nEscriba el puerto: ");
                         //int pto = Integer.parseInt(br.readLine());
                         Socket cl2 = new Socket(host,7005);
-
+                        Iterator<String> archivo = nombresArchivos.iterator();
+                        
+                        while(archivo.hasNext()){
+                            //Mediante archivo se comprobará el archivo en la carpeta para re enviarlo
+                            String elemento = archivo.next();
+                            
+                        }           
 
                     
                     }catch(Exception e){
