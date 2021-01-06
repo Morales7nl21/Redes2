@@ -24,6 +24,7 @@ public class SArchTCPB {
                 DataInputStream dis = new DataInputStream(cl.getInputStream());
                 int tamB = dis.readInt();
                 int nArch = dis.readInt();
+                int Nagle = dis.readInt();  //recibe estado de algortimo Nagle
                 byte []b = new byte[tamB];
                 for(int i=0;i<nArch;i++){                    
                     String nombre = dis.readUTF();
@@ -72,6 +73,13 @@ public class SArchTCPB {
                         //System.out.print("\n\nEscriba el puerto: ");
                         //int pto = Integer.parseInt(br.readLine());
                         Socket cl2 = new Socket(host,7005);
+                        if(Nagle == 0){
+                            cl2.setTcpNoDelay(true);
+                        }
+                        else{
+                            cl2.setTcpNoDelay(false);
+                        }
+                        
                         Iterator<String> archivo = nombresArchivos.iterator();
                         
                         while(archivo.hasNext()){
