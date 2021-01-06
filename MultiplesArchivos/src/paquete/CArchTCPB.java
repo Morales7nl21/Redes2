@@ -34,6 +34,8 @@ public class CArchTCPB {
                 dos.flush();
                 dos.writeInt(f.length);//enviamos numero de archivos
                 dos.flush();
+                dos.writeInt(Nagle);//enviamos estado de activacion del algoritmo Nagle
+                dos.flush();
                 //DataInputStream dis;
                 for(int i=0; i<f.length;i++){
                     String archivo = f[i].getAbsolutePath();//ruta

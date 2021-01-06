@@ -21,6 +21,7 @@ public class SEArchTCPB {
                 DataInputStream dis = new DataInputStream(cl.getInputStream());
                 int tamB = dis.readInt();   //recibe tamaño del buffer
                 int nArch = dis.readInt();  //recibe numero de archivos
+                int Nagle = dis.readInt();  //recibe estado de algortimo Nagle
                 byte []b = new byte[tamB];
                 for(int i=0;i<nArch;i++){
                     String nombre = dis.readUTF();
