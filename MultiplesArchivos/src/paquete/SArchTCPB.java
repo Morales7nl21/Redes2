@@ -6,12 +6,12 @@ import java.io.*;
 public class SArchTCPB {
     
     public static void main(String []args){
-        boolean flagDir=true;
+        //boolean flagDir=true;
+        boolean flagEnvio=false;
         try{
-            //see ha cambiado esto
             //Creamos el socket
             ServerSocket s = new ServerSocket(7000);
-            String user1;
+            
             //Iniciamos ciclo infinito del Servidor
             for(;;){
                 //Esperamos una conexion
@@ -19,15 +19,10 @@ public class SArchTCPB {
                 System.out.println("Conexion establecida desde: "+cl.getInetAddress()+" ; "+cl.getPort());
                
                 DataInputStream dis = new DataInputStream(cl.getInputStream());
-                int tamB = dis.readInt();//recibe tamaño de buffer
-                int nArch = dis.readInt();//recibe numero de archivos
+                int tamB = dis.readInt();
+                int nArch = dis.readInt();
                 byte []b = new byte[tamB];
-                for(int i=0;i<nArch;i++){
-                    if (flagDir) {
-                                File directorio = new File("C:\\Users\\LENOVO 720\\Desktop\\IPN Documents\\6toSemestre\\Redes\\MultiplesArchivos\\Cliente_ServidorMArchivs\\Resources\\" + cl.getPort());
-                                directorio.mkdir();
-                                flagDir = false;
-                            }
+                for(int i=0;i<nArch;i++){                    
                     String nombre = dis.readUTF();
                     System.out.println("Recibimos el archivo: "+nombre);
                     long tam = dis.readLong();
@@ -54,11 +49,25 @@ public class SArchTCPB {
                         System.out.print("Recibido "+porcentaje+"%\r");
                     }
                     System.out.println("\n\nArchivo Recibido.");
+                    flagEnvio=true;
                     dos.close();
+                    
+                    
                 }
                 
                 dis.close();
                 cl.close();
+                
+                
+                if(flagEnvio){
+                    //se procedera a enviar todo al otro vato
+                    Socket cl2 = s.accept();
+                    System.out.println("Conexion establecida desde: se le mandaran las imagenes "+cl2.getInetAddress()+" ; "+cl2.getPort());
+                    DataInputStream dis2 = new DataInputStream(cl2.getInputStream());
+                
+                
+                }
+                
             }
         }catch(Exception e){
             e.printStackTrace();
