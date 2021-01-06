@@ -12,7 +12,7 @@ public class SEArchTCPB {
     public static void main(String []args){
         try{
             //Creamos el socket
-            ServerSocket s = new ServerSocket(7000);
+            ServerSocket s = new ServerSocket(7005);
             //Iniciamos ciclo infinito del Servidor
             for(;;){
                 //Esperamos una conexion

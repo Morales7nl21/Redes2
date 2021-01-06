@@ -61,9 +61,19 @@ public class SArchTCPB {
                 
                 if(flagEnvio){
                     //se procedera a enviar todo al otro vato
-                    Socket cl2 = s.accept();
-                    System.out.println("Conexion establecida desde: se le mandaran las imagenes "+cl2.getInetAddress()+" ; "+cl2.getPort());
-                    DataInputStream dis2 = new DataInputStream(cl2.getInputStream());
+                    try{
+                        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                        System.out.print("Escriba la direccion del servidor: ");
+                        String host = br.readLine();
+                        //System.out.print("\n\nEscriba el puerto: ");
+                        //int pto = Integer.parseInt(br.readLine());
+                        Socket cl2 = new Socket(host,7005);
+
+                        
+                    
+                    }catch(Exception e){
+
+                    }    
                 
                 
                 }
