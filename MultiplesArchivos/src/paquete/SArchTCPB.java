@@ -8,6 +8,7 @@ public class SArchTCPB {
     public static void main(String []args){
         boolean flagDir=true;
         try{
+            //see ha cambiado esto
             //Creamos el socket
             ServerSocket s = new ServerSocket(7000);
             String user1;
