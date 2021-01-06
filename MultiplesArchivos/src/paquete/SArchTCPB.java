@@ -8,6 +8,9 @@ public class SArchTCPB {
     public static void main(String []args){
         //boolean flagDir=true;
         boolean flagEnvio=false;
+        
+        ArrayList<String> nombresArchivos = new ArrayList<String>(); //Almacenara los nombres de los archivos que recibio para guardalros ahi
+
         try{
             //Creamos el socket
             ServerSocket s = new ServerSocket(7000);
@@ -24,6 +27,7 @@ public class SArchTCPB {
                 byte []b = new byte[tamB];
                 for(int i=0;i<nArch;i++){                    
                     String nombre = dis.readUTF();
+                    nombresArchivos.add(nombre);
                     System.out.println("Recibimos el archivo: "+nombre);
                     long tam = dis.readLong();
                     DataOutputStream dos = new DataOutputStream(new FileOutputStream(nombre));
@@ -69,7 +73,7 @@ public class SArchTCPB {
                         //int pto = Integer.parseInt(br.readLine());
                         Socket cl2 = new Socket(host,7005);
 
-                        
+
                     
                     }catch(Exception e){
 
