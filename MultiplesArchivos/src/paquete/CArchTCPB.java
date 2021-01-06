@@ -32,10 +32,11 @@ public class CArchTCPB {
                 DataOutputStream dos = new DataOutputStream(cl.getOutputStream());
                 dos.writeInt(tamB);//enviamos tamaño de buffer
                 dos.flush();
-                dos.writeInt(f.length);//enviamos numero de archivos
-                dos.flush();
                 dos.writeInt(Nagle);//enviamos estado de activacion del algoritmo Nagle
                 dos.flush();
+                dos.writeInt(f.length);//enviamos numero de archivos
+                dos.flush();
+               
                 //DataInputStream dis;
                 for(int i=0; i<f.length;i++){
                     String archivo = f[i].getAbsolutePath();//ruta
