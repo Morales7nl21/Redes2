@@ -19,8 +19,8 @@ public class SArchTCPB {
                 System.out.println("Conexion establecida desde: "+cl.getInetAddress()+" ; "+cl.getPort());
                
                 DataInputStream dis = new DataInputStream(cl.getInputStream());
-                int tamB = dis.readInt();
-                int nArch = dis.readInt();
+                int tamB = dis.readInt();//recibe tamaño de buffer
+                int nArch = dis.readInt();//recibe numero de archivos
                 byte []b = new byte[tamB];
                 for(int i=0;i<nArch;i++){
                     if (flagDir) {
