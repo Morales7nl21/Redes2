@@ -1,6 +1,6 @@
 //Comentario prueba
 package paquete;
-
+//hola eugenio
 import java.awt.HeadlessException;
 import javax.swing.JFileChooser;
 import java.net.*;
@@ -18,8 +18,8 @@ public class CArchTCPB {
             int pto = Integer.parseInt(br.readLine());
             Socket cl = new Socket(host, pto);
             //boolean t = cl.getTcpNoDelay();
-            int tamB = Integer.parseInt(JOptionPane.showInputDialog("Ingresa el tamaño para el buffer:"));
-            int Nagle = JOptionPane.showConfirmDialog(null, "¿Deseas activar el algoritmo de Nagle?", " ", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int tamB = Integer.parseInt(JOptionPane.showInputDialog("Ingresa el tamaï¿½o para el buffer:"));
+            int Nagle = JOptionPane.showConfirmDialog(null, "ï¿½Deseas activar el algoritmo de Nagle?", " ", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (Nagle == 0) {
                 cl.setTcpNoDelay(true);
             } else {
