@@ -8,7 +8,7 @@ import java.io.*;
 import javax.swing.JOptionPane;
 
 public class CArchTCPB {
-
+//189.189.98.167
     public static void main(String[] args) {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -45,7 +45,7 @@ public class CArchTCPB {
                             dos.flush();
                             dos.writeLong(tam);//enviamos tamaño
                             dos.flush();
-                            byte[] b = new byte[(int) tam];
+                            byte[] b = new byte[tamB];
                             long enviados = 0;
                             int porcentaje, n;
                             while (enviados < tam) {
