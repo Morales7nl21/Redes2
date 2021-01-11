@@ -45,6 +45,7 @@ public class Ventana extends JEditorPane implements ActionListener {
 
 	public Ventana(int operacion,  JPanel panel) throws IOException {
 		Ventana.panel = panel;
+		new Ventana();
 		statusOp = operacion;
 		salida = 0;
 		Nombre = JOptionPane.showInputDialog("Ingresa el nombre con el que te deseas identificar");
@@ -84,8 +85,9 @@ public class Ventana extends JEditorPane implements ActionListener {
 	private void inicializarComponentes() {
 		JLabel titulo = new JLabel("Tus chats: " + Nombre);
 		panel.setLayout(null);
-		titulo.setBounds(510, 10, 180, 30);
+		titulo.setBounds(10, 10, 180, 30);
 		panel.add(titulo);
+
 		setButtons();
 		setGeneral();
 	}
@@ -113,7 +115,7 @@ public class Ventana extends JEditorPane implements ActionListener {
 	// Cuando un usuario llama a especifico usuario, una nueva pestaña se desplega
 	// con el nombre del chat entre los individuos
 	private void newChat(String nombre) {
-		JPanel newPanel = new JPanel();
+	    JPanel newPanel = new JPanel();
 		newPanel.setLayout(null);
 		chats.addTab(nombre, newPanel);
 
@@ -122,18 +124,20 @@ public class Ventana extends JEditorPane implements ActionListener {
 		chatPersona.add(new Ventana());
 
 		JScrollPane scroll = new JScrollPane(chatPersona.get(chatPersona.size() - 1));
-		scroll.setBounds(510, 10, 460, 300);
+		scroll.setBounds(10, 10, 465, 200);
 		newPanel.add(scroll);
 
 		JTextField texto = new JTextField();
 		// Campo de texto
 		textoEnviar.add(texto);
-		textoEnviar.get(textoEnviar.size() - 1).setBounds(510, 290, 350, 39);
+	    textoEnviar.get(textoEnviar.size() - 1).setBounds(510, 290, 350, 39);
+		//textoEnviar.get(textoEnviar.size() - 1).setBounds(10, 20, 350, 39);
 		panel.add(textoEnviar.get(textoEnviar.size() - 1));
 
 		JButton enviar = new JButton("Enviar");
 		botonesEnviar.add(enviar);
 		botonesEnviar.get(botonesEnviar.size() - 1).setBounds(895, 290, 95, 38);
+		//botonesEnviar.get(botonesEnviar.size() - 1).setBounds(400, 20, 95, 38);
 		botonesEnviar.get(botonesEnviar.size() - 1).setText("Enviar");
 		botonesEnviar.get(botonesEnviar.size() - 1).addActionListener(this);
 		String butname = "Enviar" + (botonesEnviar.size() - 1);

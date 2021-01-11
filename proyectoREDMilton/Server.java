@@ -21,15 +21,7 @@ public class Server extends JFrame
 	Socket RTSPsocket; //socket used to send/receive RTSP messages
     	JLabel label;
 
-    public Server(){
-
-        //init Frame
-        super("Server");
-        //GUI:
-        label = new JLabel("Send frame #        ", JLabel.CENTER);
-        getContentPane().add(label, BorderLayout.CENTER);
-
-    }
+  
           
 
     public static void main(String[] args) {
@@ -50,7 +42,7 @@ public class Server extends JFrame
 
         //show GUI:
         theServer.pack();
-        theServer.setVisible(true);
+  
 
         //get RTSP socket port from the command line
         int RTSPport = Integer.parseInt(port);
