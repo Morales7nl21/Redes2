@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="1090.0" style="-fx-background-color: #2B2738;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.copiaControladora.CopiaControladorRenovaciones">
+   <children>
+      <GridPane layoutX="-2.0" layoutY="77.0" prefHeight="344.0" prefWidth="1090.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints maxHeight="37.0" minHeight="0.0" prefHeight="0.0" />
+            <RowConstraints maxHeight="386.0" minHeight="10.0" prefHeight="273.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <TableView fx:id="TablaUsuarios" editable="true" prefHeight="400.0" prefWidth="1090.0" style="-fx-background-color: #2B2738;" GridPane.rowIndex="2">
+               <columns>
+                  <TableColumn fx:id="Boleta" prefWidth="221.0" style="-fx-background-color: #9D68CA;" text="Boleta" />
+                  <TableColumn fx:id="Nombre" prefWidth="314.0" style="-fx-background-color: #9D68CA;" text="Nombre" />
+                  <TableColumn fx:id="Correo" prefWidth="448.0" style="-fx-background-color: #9D68CA;" text="Correo" />
+                  <TableColumn fx:id="Casillero" prefWidth="106.0" style="-fx-background-color: Red;" text="Casillero" />
+               </columns>
+            </TableView>
+         </children>
+      </GridPane>
+      <Button fx:id="EnviarAviso" layoutX="962.0" layoutY="12.0" mnemonicParsing="false" onAction="#EnviaCorreo" prefHeight="37.0" prefWidth="123.0" style="-fx-background-color: rgb(79, 158, 215);" text="Enviar Aviso" />
+      <TextField fx:id="DatosAcep" layoutX="2.0" layoutY="45.0" prefHeight="26.0" prefWidth="181.0" />
+      <Button fx:id="BuscaAcep" layoutX="187.0" layoutY="34.0" mnemonicParsing="false" onAction="#BuscaUsuarios" prefHeight="37.0" prefWidth="97.0" style="-fx-background-color: #2A5699;" text="Buscar" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="Renueva" layoutX="849.0" layoutY="12.0" mnemonicParsing="false" onAction="#RenuevaUsuarios" prefHeight="37.0" prefWidth="97.0" style="-fx-background-color: rgb(117, 189, 67);" text="Renovar" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

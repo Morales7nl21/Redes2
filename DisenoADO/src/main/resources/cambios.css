@@ -1,0 +1,6 @@
+
+.table-view  {
+-selected-color:red;
+}
+
+.table-row-cell:selected { -fx-background-color: #A6E2F6; }

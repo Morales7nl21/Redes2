@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="1090.0" style="-fx-background-color: #2B2738;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.copiaControladora.ControladoraAceptados">
+   <children>
+      <AnchorPane layoutX="799.0" layoutY="9.0" prefHeight="63.0" prefWidth="291.0" style="-fx-background-color: rgb(58, 181, 230);">
+         <children>
+            <Button fx:id="EnviaCorreo" layoutX="4.0" layoutY="7.0" mnemonicParsing="false" onAction="#Invitacion" prefHeight="50.0" prefWidth="146.0" style="-fx-background-color: rgb(254, 207, 77);" text="      Enviar Correo" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button fx:id="Aceptar" layoutX="164.0" layoutY="7.0" mnemonicParsing="false" onAction="#RelacionaUsuario" prefHeight="50.0" prefWidth="113.0" style="-fx-background-color: rgb(117, 189, 67);" text="   Aceptar" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <ImageView fitHeight="38.0" fitWidth="36.0" layoutX="161.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@usuario.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="38.0" fitWidth="36.0" layoutX="4.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@usuario.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <TextField fx:id="Datos" layoutX="2.0" layoutY="38.0" prefHeight="26.0" prefWidth="127.0" promptText="Ingresa datos" />
+      <DatePicker fx:id="IngresaFecha" layoutX="137.0" layoutY="38.0" prefHeight="25.0" prefWidth="127.0" promptText="Fecha" />
+      <ComboBox fx:id="Alumnos" layoutX="277.0" layoutY="40.0" onAction="#IngresaDatos" prefHeight="25.0" prefWidth="190.0" promptText="menu" />
+      <Button fx:id="Ingresa" layoutX="488.0" layoutY="30.0" mnemonicParsing="false" onAction="#RecibeDatos" prefHeight="37.0" prefWidth="97.0" style="-fx-background-color: #2A5699;" text="Ingresa" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <GridPane layoutY="72.0" prefHeight="358.0" prefWidth="1090.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="386.0" minHeight="10.0" prefHeight="358.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <TableView fx:id="TablaUsuarios" editable="true" prefHeight="358.0" prefWidth="1048.0" style="-fx-background-color: #2B2738;" stylesheets="@cambios.css">
+               <columns>
+                  <TableColumn fx:id="Boleta" prefWidth="146.0" text="Boleta" />
+                  <TableColumn fx:id="Nombre" minWidth="0.0" prefWidth="210.0" text="Nombre" />
+                  <TableColumn fx:id="Registro" prefWidth="127.0" text="Registro" />
+                  <TableColumn fx:id="Correo" minWidth="0.0" prefWidth="254.0" text="Correo" />
+                  <TableColumn fx:id="Semestre" prefWidth="94.0" text="Semestre" />
+                  <TableColumn fx:id="Telefono" prefWidth="139.0" text="Telefono" />
+                  <TableColumn fx:id="Fecha" prefWidth="119.0" text="Fecha Envio" />
+                  <TableColumn fx:id="Envio" minWidth="0.0" prefWidth="0.0" text="Envio" />
+               </columns>
+            </TableView>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

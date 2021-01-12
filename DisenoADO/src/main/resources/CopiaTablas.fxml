@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="700.0" maxWidth="1377.0" minHeight="700.0" minWidth="1080.0" prefHeight="700.0" prefWidth="1377.0" style="-fx-background-color: #2B2738;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.copiaControladora.CopiaControlador">
+	<children>
+		<BorderPane layoutX="1082.0" layoutY="-5.0" prefHeight="65.0" prefWidth="286.0" style="-fx-background-color: #2A3A9A#2A3A9A;" />
+		<VBox prefHeight="700.0" prefWidth="283.0" style="-fx-background-color: #2D293B;">
+			<children>
+				<ImageView fitHeight="270.0" fitWidth="283.0" opacity="0.51" pickOnBounds="true">
+					<image>
+						<Image url="@escom.png" />
+					</image>
+				</ImageView>
+				<Button fx:id="Usuario" alignment="BOTTOM_LEFT" defaultButton="true" mnemonicParsing="false" onAction="#UsuarioFuncion" onMouseMoved="#Mueve" opacity="0.8" prefHeight="133.0" prefWidth="283.0" style="-fx-background-color: #4F2287;" text="Registro de Alumnos " textFill="WHITE" wrapText="true">
+					<graphic>
+      						<ImageView fitHeight="64.0" fitWidth="89.0" pickOnBounds="true" preserveRatio="true">
+      							<image>
+      								<Image url="@138659.png" />
+      							</image>
+      						</ImageView>
+					</graphic>
+					<font>
+						<Font name="Bauhaus 93" size="20.0" />
+					</font>
+				</Button>
+				<Button fx:id="Asistencia" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#AsistenciaFuncion" onMouseMoved="#Mueve" opacity="0.8" prefHeight="156.0" prefWidth="283.0" style="-fx-background-color: #4F2287;" text="Alumnos " textAlignment="CENTER" textFill="WHITE" wrapText="true">
+					<graphic>
+						<ImageView fitHeight="64.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
+							<image>
+								<Image url="@asistencia.png" />
+							</image>
+						</ImageView>
+					</graphic>
+					<font>
+						<Font name="Bauhaus 93" size="20.0" />
+					</font>
+				</Button>
+				<Button fx:id="UsuariosRech" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#RechazadosFuncion" onMouseMoved="#Mueve" opacity="0.8" prefHeight="150.0" prefWidth="282.0" style="-fx-background-color: #4F2287;" text="Renovacion de alumnos" textFill="WHITE" wrapText="true">
+					<graphic>
+      						<ImageView fitHeight="75.0" fitWidth="76.0" pickOnBounds="true" smooth="false">
+      							<image>
+      								<Image url="@tache.png" />
+      							</image>
+      						</ImageView>
+					</graphic>
+					<font>
+						<Font name="Bauhaus 93" size="19.0" />
+					</font>
+				</Button>
+			</children>
+		</VBox>
+		<Pane id="Cambia" fx:id="Cambia" layoutX="284.0" layoutY="90.0" prefHeight="180.0" prefWidth="976.0" style="-fx-background-color: #6E2BDC;">
+			<children>
+				<Text fx:id="grande" fill="WHITE" layoutX="8.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Usuarios" wrappingWidth="494.9830722808838">
+					<font>
+						<Font name="Berlin Sans FB" size="41.0" />
+					</font>
+				</Text>
+				<Text fx:id="chico" fill="WHITE" layoutX="313.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Usuarios Asistidos/Usuarios rechazados" wrappingWidth="456.0">
+					<font>
+						<Font name="Berlin Sans FB" size="17.0" />
+					</font>
+				</Text>
+			</children>
+		</Pane>
+      <Button fx:id="Login" layoutX="1091.0" layoutY="8.0" mnemonicParsing="false" onAction="#Regresa" onMouseMoved="#Mueve" prefHeight="45.0" prefWidth="117.0" style="-fx-background-color: #2A5699;" text="    Inicio" textFill="WHITE">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <ImageView fitHeight="45.0" fitWidth="42.0" layoutX="1098.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@usuario.png" />
+         </image>
+      </ImageView>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="19.0" layoutX="290.0" layoutY="3.0" stroke="BLACK" strokeType="INSIDE" width="13.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1fff54" height="19.0" layoutX="290.0" layoutY="27.0" stroke="BLACK" strokeType="INSIDE" width="13.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f" height="19.0" layoutX="290.0" layoutY="49.0" stroke="BLACK" strokeType="INSIDE" width="13.0" />
+      <Label layoutX="309.0" layoutY="3.0" text="Alumnos correo enviados" textFill="WHITE">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="309.0" layoutY="27.0" text="Alumnos registrados" textFill="WHITE">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="309.0" layoutY="49.0" text="Alumnos rezagados" textFill="WHITE">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <BorderPane fx:id="BorderPane" layoutX="284.0" layoutY="310.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="391.0" prefWidth="1090.0" />
+	</children>
+	<opaqueInsets>
+		<Insets />
+	</opaqueInsets>
+	<padding>
+		<Insets left="50.0" />
+	</padding>
+</AnchorPane>
