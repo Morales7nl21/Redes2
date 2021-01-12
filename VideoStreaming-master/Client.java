@@ -28,7 +28,6 @@ public class Client{
     // RTP over UDP
     DatagramSocket rtpSocket; 
     DatagramPacket rtpPacket;
-    //Comentario prueba
     
     // RTSP over TCP    
     Socket rtspSocket;

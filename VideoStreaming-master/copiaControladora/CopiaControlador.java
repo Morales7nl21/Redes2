@@ -1,167 +1,100 @@
-package com.copiaControladora;
+package copiaControladora;
 
-
-import java.io.IOException;
-
-import CopiaInicio.CopiaPagIngreso;
-import javafx.event.ActionEvent;
+import com.gluonhq.charm.glisten.control.Icon;
+import com.jfoenix.controls.JFXCheckBox;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
+public class CopiaControlador {
 
-
-
-
-public class CopiaControlador{
-	static boolean estado;
-	@FXML
-	private Button Usuario;
-
-	@FXML
-	private Button Asistencia;
-
-	@FXML
-	private Button UsuariosRech;
-
-	@FXML
-	private ToggleButton AsistenciaBoton;
-
-	@FXML
-	private Pane Cambia;
-
-	@FXML
-	private Text grande;
-
-	@FXML
-	private Text chico;
-
-	@FXML
-	private Button AsistenciaPasa;
-   
-	@FXML
-    private Button Login;
-	
     @FXML
-    private BorderPane BorderPane;
+    private ResourceBundle resources;
 
+    @FXML
+    private URL location;
 
+    @FXML
+    private Pane Cambia;
 
-  /*
- 	Cuando presionamos el boton Usuario cambia nuestro pane 
- 	y el texto adentro de el.
-  */
-	@FXML
-	void UsuarioFuncion(ActionEvent event) throws IOException {
-		grande.setText("Registros");
-		chico.setText("Asignaciones/Renovaciones");
-		Cambia.setBackground(
-				new Background(new BackgroundFill(Color.rgb(110, 43, 220), CornerRadii.EMPTY, Insets.EMPTY)));
+    @FXML
+    private Text grande;
 
-		// Ejecuta la escena con respecto al automata seleccionado
-	    Parent root = new FXMLLoader().load(getClass().getResource("/Aceptados.fxml"));
-		BorderPane.setCenter(root);
-	}
-	
-	/*
- 	Cuando presionamos el boton Rechazados cambia nuestro pane 
- 	y el texto adentro de el.
-  */
+    @FXML
+    private Text chico;
 
-	@FXML
-	void RechazadosFuncion(ActionEvent event) throws IOException {
-		grande.setText("Renovaciones");
-		chico.setText("Asignaciones/Registros");
-		Cambia.setBackground(
-				new Background(new BackgroundFill(Color.rgb(157, 104, 202), CornerRadii.EMPTY, Insets.EMPTY)));
-		
-		// Ejecuta la escena con respecto al automata seleccionado
-	    Parent root = new FXMLLoader().load(getClass().getResource("/Rechazados.fxml"));
-		BorderPane.setCenter(root);
+    @FXML
+    private ToggleButton publico;
 
-	}
+    @FXML
+    private Icon Icon;
 
-	/*
- 	Cuando presionamos el boton Asistencia cambia nuestro pane 
- 	y el texto adentro de el.
-  */
-	@FXML
-	void AsistenciaFuncion(ActionEvent event) throws IOException {
+    @FXML
+    private ToggleButton Privado;
 
-		chico.setText("Registros/Renovaciones");
-		grande.setText("Asignaciones");
-		Cambia.setBackground(new Background(new BackgroundFill(Color.rgb(100, 50, 240), CornerRadii.EMPTY, Insets.EMPTY)));
-	
-		// Ejecuta la escena con respecto al automata seleccionado
-	    Parent root = new FXMLLoader().load(getClass().getResource("/Ingresados.fxml"));
-		BorderPane.setCenter(root);
+    @FXML
+    private Icon Icon2;
 
-	
-	}
+    @FXML
+    private TextField NombrePel;
 
-	
-/*Al pasar por el boton por donde el cursor esta
-   este cambia de color 
-   	
- */
-	@FXML
-	void Mueve(MouseEvent event) {
-		if (event.getSource() == Usuario)
-			Usuario.setBackground(
-					new Background(new BackgroundFill(Color.rgb(31, 31, 31), CornerRadii.EMPTY, Insets.EMPTY)));
-		else if (event.getSource() == UsuariosRech)
-			UsuariosRech.setBackground(
-					new Background(new BackgroundFill(Color.rgb(31, 31, 31), CornerRadii.EMPTY, Insets.EMPTY)));
-		else if (event.getSource() == Asistencia)
-			Asistencia.setBackground(
-					new Background(new BackgroundFill(Color.rgb(31, 31, 31), CornerRadii.EMPTY, Insets.EMPTY)));
-		else if (event.getSource() == AsistenciaPasa)
-			AsistenciaPasa.setBackground(
-					new Background(new BackgroundFill(Color.rgb(31, 31, 31), CornerRadii.EMPTY, Insets.EMPTY)));
-		else if (event.getSource() ==AsistenciaBoton)
-			AsistenciaBoton.setBackground(
-					new Background(new BackgroundFill(Color.rgb(31, 31, 31), CornerRadii.EMPTY, Insets.EMPTY)));
-		else if (event.getSource() ==Login)
-			Login.setBackground(
-					new Background(new BackgroundFill(Color.rgb(31, 31, 31), CornerRadii.EMPTY, Insets.EMPTY)));
-			
-			
+    @FXML
+    private TextArea Descripcion;
 
-	}
-	
-	
+    @FXML
+    private Button CrearSala;
 
+    @FXML
+    private Button SubirArchivo;
 
-	
-	//Se supone que limpia todo lo que halla creado el usuario
-	@FXML
-    void Regresa(ActionEvent event) throws IOException {
-		CompiaControladorLog.ventana.close();
-		Parent root=new FXMLLoader().load(getClass().getResource("/CopiaLogin.fxml"));///7
-	    Scene scene= new Scene(root);
-	     Stage ventana= (Stage) ((Node)event.getSource( ) ).getScene().getWindow();
-	     ventana.setScene(scene);
-	     ventana.show();
-		
-    
-	   
-       
+    @FXML
+    private Label LabelAr;
+
+    @FXML
+    private JFXCheckBox Terror;
+
+    @FXML
+    private JFXCheckBox Romance;
+
+    @FXML
+    private JFXCheckBox Accion;
+
+    @FXML
+    private JFXCheckBox Comedia;
+
+    @FXML
+    private JFXCheckBox Tragedia;
+
+    @FXML
+    private JFXCheckBox Ficcion;
+
+    @FXML
+    void initialize() {
+        assert Cambia != null : "fx:id=\"Cambia\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert grande != null : "fx:id=\"grande\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert chico != null : "fx:id=\"chico\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert publico != null : "fx:id=\"publico\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert Icon != null : "fx:id=\"Icon\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert Privado != null : "fx:id=\"Privado\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert Icon2 != null : "fx:id=\"Icon2\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert NombrePel != null : "fx:id=\"NombrePel\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert Descripcion != null : "fx:id=\"Descripcion\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert CrearSala != null : "fx:id=\"CrearSala\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert SubirArchivo != null : "fx:id=\"SubirArchivo\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert LabelAr != null : "fx:id=\"LabelAr\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert Terror != null : "fx:id=\"Terror\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert Romance != null : "fx:id=\"Romance\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert Accion != null : "fx:id=\"Accion\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert Comedia != null : "fx:id=\"Comedia\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert Tragedia != null : "fx:id=\"Tragedia\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert Ficcion != null : "fx:id=\"Ficcion\" was not injected: check your FXML file 'CrearSala.fxml'.";
+
     }
-	
-	
-
 }

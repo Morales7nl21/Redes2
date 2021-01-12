@@ -11,6 +11,10 @@ public class ServidorChat extends Thread {
     public static final int DGRAM_BUF_LEN = 2048;
     private ArrayList<String> contactos;
 
+    
+    
+    
+    
     public void run() {
         contactos = new ArrayList();
         String msg = "";

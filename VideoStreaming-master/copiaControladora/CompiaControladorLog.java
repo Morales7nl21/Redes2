@@ -3,13 +3,13 @@ package copiaControladora;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 public class CompiaControladorLog {
 
     @FXML
-    private Hyperlink Resumen;
+    private ImageView Imagen;
 
     @FXML
     private Button Entrar;
