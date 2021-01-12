@@ -6,12 +6,12 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Eugenio Milton/Downloads/jfoenix-9.0.10.jar">
+	<classpathentry kind="lib" path="C:/Users/Arturo Reyes Gomez/Downloads/jfoenix-9.0.10.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX">
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/FX15">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

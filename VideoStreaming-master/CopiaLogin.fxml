@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="243.0" prefWidth="206.0" style="-fx-background-color: #313131;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="copiaControladora.CompiaControladorLog">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="243.0" prefWidth="206.0" style="-fx-background-color: #313131;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="copiaControladora.CopiaLogin">
 	<children>
 		<AnchorPane prefHeight="243.0" prefWidth="107.0" style="-fx-background-color: #3972B7;" />
       <Label layoutX="43.0" layoutY="121.0" prefHeight="45.0" prefWidth="78.0" text="Genero:" textFill="WHITE">
