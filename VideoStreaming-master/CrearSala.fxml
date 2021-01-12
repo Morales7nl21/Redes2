@@ -19,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="700.0" maxWidth="1377.0" minHeight="605.0" minWidth="512.0" prefHeight="660.0" prefWidth="512.0" style="-fx-background-color: #2B2738;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="copiaControladora.CopiaControlador">
+<AnchorPane maxHeight="700.0" maxWidth="1377.0" minHeight="605.0" minWidth="512.0" prefHeight="660.0" prefWidth="512.0" style="-fx-background-color: #2B2738;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="copiaControladora.CrearSala">
 	<children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3187b545" height="104.0" layoutX="115.0" layoutY="372.0" stroke="BLACK" strokeType="INSIDE" width="283.0" />
 		<Pane id="Cambia" fx:id="Cambia" layoutX="12.0" layoutY="14.0" prefHeight="180.0" prefWidth="493.0" style="-fx-background-color: #6E2BDC;">

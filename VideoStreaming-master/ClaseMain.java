@@ -1,12 +1,12 @@
-package copiaControladora;
-	
+
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class ClaseP extends Application{
+public class ClaseMain extends Application{
 	public static Stage primaryStage;
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage=primaryStage;
@@ -20,7 +20,8 @@ public class ClaseP extends Application{
 	
 	public static void main(String[] args) throws Exception
 	{
-		 launch(args);
+		System.out.println(args.length); 
+		launch(args);
 		
 	}
 
