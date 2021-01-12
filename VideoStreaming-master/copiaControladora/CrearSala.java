@@ -1,7 +1,8 @@
 package copiaControladora;
 
-import com.gluonhq.charm.glisten.control.Icon;
 import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTimePicker;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -13,7 +14,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
-public class CopiaControlador {
+public class CrearSala {
 
     @FXML
     private ResourceBundle resources;
@@ -31,16 +32,10 @@ public class CopiaControlador {
     private Text chico;
 
     @FXML
-    private ToggleButton publico;
-
-    @FXML
-    private Icon Icon;
+    private ToggleButton Publico;
 
     @FXML
     private ToggleButton Privado;
-
-    @FXML
-    private Icon Icon2;
 
     @FXML
     private TextField NombrePel;
@@ -50,6 +45,12 @@ public class CopiaControlador {
 
     @FXML
     private Button CrearSala;
+
+    @FXML
+    private JFXTimePicker Hora;
+
+    @FXML
+    private JFXDatePicker Fecha;
 
     @FXML
     private Button SubirArchivo;
@@ -80,13 +81,13 @@ public class CopiaControlador {
         assert Cambia != null : "fx:id=\"Cambia\" was not injected: check your FXML file 'CrearSala.fxml'.";
         assert grande != null : "fx:id=\"grande\" was not injected: check your FXML file 'CrearSala.fxml'.";
         assert chico != null : "fx:id=\"chico\" was not injected: check your FXML file 'CrearSala.fxml'.";
-        assert publico != null : "fx:id=\"publico\" was not injected: check your FXML file 'CrearSala.fxml'.";
-        assert Icon != null : "fx:id=\"Icon\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert Publico != null : "fx:id=\"Publico\" was not injected: check your FXML file 'CrearSala.fxml'.";
         assert Privado != null : "fx:id=\"Privado\" was not injected: check your FXML file 'CrearSala.fxml'.";
-        assert Icon2 != null : "fx:id=\"Icon2\" was not injected: check your FXML file 'CrearSala.fxml'.";
         assert NombrePel != null : "fx:id=\"NombrePel\" was not injected: check your FXML file 'CrearSala.fxml'.";
         assert Descripcion != null : "fx:id=\"Descripcion\" was not injected: check your FXML file 'CrearSala.fxml'.";
         assert CrearSala != null : "fx:id=\"CrearSala\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert Hora != null : "fx:id=\"Hora\" was not injected: check your FXML file 'CrearSala.fxml'.";
+        assert Fecha != null : "fx:id=\"Fecha\" was not injected: check your FXML file 'CrearSala.fxml'.";
         assert SubirArchivo != null : "fx:id=\"SubirArchivo\" was not injected: check your FXML file 'CrearSala.fxml'.";
         assert LabelAr != null : "fx:id=\"LabelAr\" was not injected: check your FXML file 'CrearSala.fxml'.";
         assert Terror != null : "fx:id=\"Terror\" was not injected: check your FXML file 'CrearSala.fxml'.";
@@ -98,3 +99,4 @@ public class CopiaControlador {
 
     }
 }
+

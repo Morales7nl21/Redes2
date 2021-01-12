@@ -12,10 +12,10 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="787.0" style="-fx-background-color: #2B2738;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="copiaControladora.ControladoraAceptados">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="787.0" style="-fx-background-color: #2B2738;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="copiaControladora.ControladoraAceptados">
    <children>
       <TextField fx:id="Datos" layoutX="1.0" layoutY="62.0" prefHeight="26.0" prefWidth="159.0" promptText="Buscar Pelicula" />
-      <ComboBox fx:id="Genero" layoutX="170.0" layoutY="59.0" onAction="#IngresaDatos" prefHeight="25.0" prefWidth="172.0" promptText="Genero" />
+      <ComboBox fx:id="Genero" layoutX="170.0" layoutY="59.0" prefHeight="25.0" prefWidth="172.0" promptText="Genero" />
       <Button fx:id="Ingresa" layoutX="351.0" layoutY="58.0" mnemonicParsing="false" onAction="#RecibeDatos" prefHeight="32.0" prefWidth="113.0" style="-fx-background-color: #2A5699;" text="Ingresa" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="16.0" />
@@ -43,8 +43,8 @@
          </children>
       </GridPane>
       <TextField fx:id="IdPrivado" layoutX="482.0" layoutY="158.0" prefHeight="26.0" prefWidth="201.0" promptText="Codigo Sala" />
-      <Button fx:id="Ingresa" layoutX="683.0" layoutY="157.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="87.0" text="Ingresa" />
-      <Button fx:id="CrearSala" layoutX="482.0" layoutY="92.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="295.0" text="Crear Sala" />
+      <Button fx:id="IngresaPrivado" layoutX="683.0" layoutY="157.0" mnemonicParsing="false" onAction="#getCodigo" prefHeight="29.0" prefWidth="87.0" text="Ingresa" />
+      <Button fx:id="CrearSala" layoutX="482.0" layoutY="92.0" mnemonicParsing="false" onAction="#otraInterfaz" prefHeight="32.0" prefWidth="295.0" text="Crear Sala" />
       <Separator layoutY="40.0" prefHeight="2.0" prefWidth="787.0" />
       <Label layoutX="2.0" layoutY="4.0" text="Movie Peers" textFill="#6babeb">
          <font>
