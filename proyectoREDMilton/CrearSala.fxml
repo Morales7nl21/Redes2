@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.gluonhq.charm.glisten.control.Icon?>
+<?import com.gluonhq.charm.glisten.control.ToggleButtonGroup?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXDialog?>
+<?import com.jfoenix.controls.JFXTimePicker?>
+<?import com.jfoenix.controls.cells.editors.base.GenericEditableTableCell?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="700.0" maxWidth="1377.0" minHeight="605.0" minWidth="512.0" prefHeight="660.0" prefWidth="512.0" style="-fx-background-color: #2B2738;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="copiaControladora.CopiaControlador">
+	<children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3187b545" height="104.0" layoutX="115.0" layoutY="372.0" stroke="BLACK" strokeType="INSIDE" width="283.0" />
+		<Pane id="Cambia" fx:id="Cambia" layoutX="12.0" layoutY="14.0" prefHeight="180.0" prefWidth="493.0" style="-fx-background-color: #6E2BDC;">
+			<children>
+				<Text fx:id="grande" fill="WHITE" fontSmoothingType="LCD" layoutX="115.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Movie Peers" wrappingWidth="216.0">
+					<font>
+						<Font name="Berlin Sans FB" size="41.0" />
+					</font>
+				</Text>
+				<Text fx:id="chico" fill="WHITE" layoutX="412.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Crear/Inicio" wrappingWidth="89.0">
+					<font>
+						<Font name="Berlin Sans FB" size="17.0" />
+					</font>
+				</Text>
+            <ToggleButtonGroup layoutX="115.0" layoutY="135.0" prefHeight="42.0" prefWidth="213.0" selectionType="SINGLE">
+                <toggles>
+                    <ToggleButton fx:id="Publico" prefHeight="42.0" prefWidth="113.0" text="Publico">
+                        <graphic>
+                            <Icon content="ACCESSIBILITY" />
+                        </graphic>
+                    </ToggleButton>
+                    <ToggleButton fx:id="Privado" prefHeight="42.0" prefWidth="103.0" selected="true" text="Privado">
+                        <graphic>
+                            <Icon content="BLOCK" />
+                        </graphic>
+                    </ToggleButton>
+                </toggles>
+            </ToggleButtonGroup>
+			</children>
+		</Pane>
+      <TextField fx:id="NombrePel" layoutX="56.0" layoutY="211.0" prefHeight="26.0" prefWidth="401.0" promptText="Pelicula" />
+      <TextArea fx:id="Descripcion" layoutX="54.0" layoutY="256.0" prefHeight="104.0" prefWidth="410.0" />
+      <Button fx:id="CrearSala" layoutX="121.0" layoutY="610.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="277.0" text="Crear" />
+      <JFXDialog layoutX="28.0" layoutY="316.0" prefHeight="32.0" prefWidth="19.0" />
+      <GenericEditableTableCell layoutX="160.0" layoutY="36.0" />
+      <JFXTimePicker fx:id="Hora" layoutX="269.0" layoutY="488.0" prefHeight="29.0" prefWidth="140.0" />
+      <JFXDatePicker fx:id="Fecha" layoutX="115.0" layoutY="488.0" prefHeight="29.0" prefWidth="146.0" />
+      <Button fx:id="SubirArchivo" layoutX="202.0" layoutY="541.0" mnemonicParsing="false" text="Subir Archivo" />
+      <Label fx:id="LabelAr" layoutX="310.0" layoutY="557.0" prefHeight="21.0" prefWidth="59.0" text="     ..." textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <JFXCheckBox fx:id="Terror" layoutX="132.0" layoutY="379.0" text="Terror" />
+      <JFXCheckBox fx:id="Romance" layoutX="132.0" layoutY="415.0" text="Romance" />
+      <JFXCheckBox fx:id="Accion" layoutX="132.0" layoutY="452.0" text="Accion" />
+      <JFXCheckBox fx:id="Comedia" layoutX="276.0" layoutY="379.0" text="Comedia" />
+      <JFXCheckBox fx:id="Tragedia" layoutX="276.0" layoutY="417.0" text="Tragedia" />
+      <JFXCheckBox fx:id="Ficcion" layoutX="275.0" layoutY="452.0" text="Ficcion" />
+	</children>
+	<opaqueInsets>
+		<Insets />
+	</opaqueInsets>
+	<padding>
+		<Insets left="50.0" />
+	</padding>
+</AnchorPane>
