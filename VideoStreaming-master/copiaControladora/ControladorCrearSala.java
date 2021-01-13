@@ -89,41 +89,46 @@ public class ControladorCrearSala {
     @FXML
     void crearSala(ActionEvent event) {
     	//System.out.println("Finaliza creacion de sala");
-    	NombreP = NombrePel.getText();
-    	if(NombreP.equals("")) {
-    		System.out.println("Nombre vacio");
-    		JOptionPane.showMessageDialog(null, "Falta nombre de la pelicula",
-    				"Nombre de Pelicula",JOptionPane.WARNING_MESSAGE);
-    		//lanzar Exception
+    	try {
+	    	NombreP = NombrePel.getText();
+	    	if(NombreP.equals("")) {//si no hay nombre
+	    		throw new LanzarException(0);//lanza excepcion tipo 0
+	    	}
+	    	Resumen = Descripcion.getText();
+	    	if(Resumen.equals("")) {
+	    		Resumen = "Sin Informacion";
+	    	}
+	    	Generos = new ArrayList<>();
+	    	if(Terror.isSelected()) {
+	    		Generos.add("Terror");
+	    	}
+	    	if(Romance.isSelected()) {
+	    		Generos.add("Romance");
+	    	}
+	    	if(Accion.isSelected()) {
+	    		Generos.add("Accion");
+	    	}
+	    	if(Comedia.isSelected()) {
+	    		Generos.add("Comedia");
+	    	}
+	    	if(Tragedia.isSelected()) {
+	    		Generos.add("Tragedia");
+	    	}
+	    	if(Ficcion.isSelected()) {
+	    		Generos.add("Ficcion");
+	    	}
+	    	if(Generos.size() == 0){
+	    		Generos.add("Sin Genero");
+	    	}
+	    	System.out.println("Llega");
+	    	//Sala salaN = new Sala(TipoSala,NombreP,Resumen,Generos);
     	}
-    	Resumen = Descripcion.getText();
-    	if(Resumen.equals("")) {
-    		Resumen = "Sin Informacion";
+    	catch(LanzarException e) {
+    		//System.out.println("Recibe excepcion");
     	}
-    	Generos = new ArrayList<>();
-    	if(Terror.isSelected()) {
-    		Generos.add("Terror");
+    	catch(Exception ex) {
+    		ex.printStackTrace();
     	}
-    	if(Romance.isSelected()) {
-    		Generos.add("Romance");
-    	}
-    	if(Accion.isSelected()) {
-    		Generos.add("Accion");
-    	}
-    	if(Comedia.isSelected()) {
-    		Generos.add("Comedia");
-    	}
-    	if(Tragedia.isSelected()) {
-    		Generos.add("Tragedia");
-    	}
-    	if(Ficcion.isSelected()) {
-    		Generos.add("Ficcion");
-    	}
-    	if(Generos.size() == 0){
-    		Generos.add("Sin Genero");
-    	}
-    	System.out.println("Llega");
-    	//Sala salaN = new Sala(TipoSala,NombreP,Resumen,Generos);
     }
 
     @FXML
@@ -164,5 +169,16 @@ public class ControladorCrearSala {
         assert Tragedia != null : "fx:id=\"Tragedia\" was not injected: check your FXML file 'CrearSala.fxml'.";
         assert Ficcion != null : "fx:id=\"Ficcion\" was not injected: check your FXML file 'CrearSala.fxml'.";
 
+    }
+    
+    public class LanzarException extends Exception{
+    	public LanzarException(int n) {
+    		switch(n) {
+    			case 0: JOptionPane.showMessageDialog(null, "Falta nombre de la pelicula",
+        				"Nombre de Pelicula",JOptionPane.WARNING_MESSAGE); 
+    			break;
+    			default: break;
+    		}
+    	}
     }
 }
