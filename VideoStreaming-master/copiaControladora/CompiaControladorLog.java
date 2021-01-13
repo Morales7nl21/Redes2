@@ -12,15 +12,12 @@ import javafx.scene.input.MouseEvent;
 public class CompiaControladorLog {
 
     @FXML
-<<<<<<< HEAD
-=======
     private ResourceBundle resources;
 
     @FXML
     private URL location;
 
     @FXML
->>>>>>> 2a77276120471e631d100f842c006cd77c553942
     private ImageView Imagen;
 
     @FXML
