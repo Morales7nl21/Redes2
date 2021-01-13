@@ -1,10 +1,14 @@
 package copiaControladora;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import principal.ClaseMain;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -17,7 +21,8 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 
 public class ControladorPaginaPrincipal {
-
+	static Stage pagP;
+	
     @FXML
     private ResourceBundle resources;
 
@@ -51,10 +56,14 @@ public class ControladorPaginaPrincipal {
     }
 
     @FXML
-    void crearSala(ActionEvent event) {
+    void crearSala(ActionEvent event) throws IOException {
     	System.out.println("Boton crear sala");
-    	Sala s = new Sala();
-    	//s.launch(null);
+    	ClaseMain.primaryStage.close();
+    	Parent root=new FXMLLoader().load(getClass().getResource("/CrearSala.fxml"));//7
+	    Scene scene= new Scene(root);
+    	pagP = (Stage) ((Node)event.getSource( ) ).getScene().getWindow();
+    	pagP.setScene(scene);
+    	pagP.show();
     }
 
     @FXML
@@ -74,16 +83,5 @@ public class ControladorPaginaPrincipal {
         assert CrearSala != null : "fx:id=\"CrearSala\" was not injected: check your FXML file 'PaginaPrincipal.fxml'.";
 
     }
-    class Sala extends Application{
-    	public Stage primaryStage;
-    	public void start(Stage primaryStage) throws Exception {
-    		this.primaryStage=primaryStage;
-    		Parent root=new FXMLLoader().load(getClass().getResource("/Peliculas.fxml"));//7
-    	    Scene scene= new Scene(root);
-    	    primaryStage.setScene(scene);
-    	    primaryStage.show();
-    	     
-    	}
-    	
-    }
+   
 }
