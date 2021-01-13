@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 
 public class ClaseMain extends Application{
 	public static Stage primaryStage;
+	
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage=primaryStage;
 		Parent root=new FXMLLoader().load(getClass().getResource("/PaginaPrincipal.fxml"));//7
@@ -21,7 +22,6 @@ public class ClaseMain extends Application{
 	
 	public static void main(String[] args) throws Exception
 	{
-		System.out.println(args.length); 
 		launch(args);
 		
 	}

@@ -2,9 +2,11 @@ package copiaControladora;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import principal.ClaseMain;
+import principal.Sala;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +24,7 @@ import javafx.scene.control.TextField;
 
 public class ControladorPaginaPrincipal {
 	static Stage pagP;
+	public static ArrayList<Sala> salas;
 	
     @FXML
     private ResourceBundle resources;
@@ -39,6 +42,7 @@ public class ControladorPaginaPrincipal {
     private Button Ingresa;
 
     @FXML
+    //Panel que muestra peliculas
     private DialogPane MuestraDisponibles;
 
     @FXML
@@ -57,7 +61,7 @@ public class ControladorPaginaPrincipal {
 
     @FXML
     void crearSala(ActionEvent event) throws IOException {
-    	System.out.println("Boton crear sala");
+    	//System.out.println("Boton crear sala");
     	ClaseMain.primaryStage.close();
     	Parent root=new FXMLLoader().load(getClass().getResource("/CrearSala.fxml"));//7
 	    Scene scene= new Scene(root);
@@ -73,6 +77,7 @@ public class ControladorPaginaPrincipal {
     }
 
     @FXML
+    //metodo que inicializa la interfaz
     void initialize() {
         assert Datos != null : "fx:id=\"Datos\" was not injected: check your FXML file 'PaginaPrincipal.fxml'.";
         assert Genero != null : "fx:id=\"Genero\" was not injected: check your FXML file 'PaginaPrincipal.fxml'.";
@@ -81,7 +86,7 @@ public class ControladorPaginaPrincipal {
         assert IdPrivado != null : "fx:id=\"IdPrivado\" was not injected: check your FXML file 'PaginaPrincipal.fxml'.";
         assert IngresaPrivado != null : "fx:id=\"IngresaPrivado\" was not injected: check your FXML file 'PaginaPrincipal.fxml'.";
         assert CrearSala != null : "fx:id=\"CrearSala\" was not injected: check your FXML file 'PaginaPrincipal.fxml'.";
-
+        
     }
    
 }

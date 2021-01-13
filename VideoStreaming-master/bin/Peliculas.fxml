@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="243.0" prefWidth="206.0" style="-fx-background-color: #313131;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="copiaControladora.CompiaControladorLog">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="243.0" prefWidth="206.0" style="-fx-background-color: #313131;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="copiaControladora.ControladorPelicula">
 	<children>
 		<AnchorPane prefHeight="243.0" prefWidth="107.0" style="-fx-background-color: #3972B7;" />
       <Label layoutX="43.0" layoutY="121.0" prefHeight="45.0" prefWidth="78.0" text="Genero:" textFill="WHITE">
@@ -17,28 +17,28 @@
          </font>
       </Label>
 		<ImageView fx:id="Imagen" fitHeight="73.0" fitWidth="213.0" layoutX="-2.0" layoutY="-3.0" pickOnBounds="true" smooth="false" />
-      <Label layoutX="51.0" layoutY="94.0" prefHeight="66.0" prefWidth="142.0" text="&lt;Hora Pelicula&gt;" textFill="WHITE">
+      <Label fx:id="LabelHora" layoutX="51.0" layoutY="94.0" prefHeight="66.0" prefWidth="142.0" text="&lt;Hora Pelicula&gt;" textFill="WHITE">
          <font>
             <Font name="Comic Sans MS" size="20.0" />
          </font>
       </Label>
-				<Label layoutX="23.0" layoutY="55.0" prefHeight="45.0" prefWidth="171.0" text="&lt;Nombre Pelicula&gt;" textFill="WHITE">
+				<Label fx:id="LabelNombre" layoutX="23.0" layoutY="55.0" prefHeight="45.0" prefWidth="171.0" text="&lt;Nombre Pelicula&gt;" textFill="WHITE">
 					<font>
 						<Font name="Comic Sans MS" size="20.0" />
 					</font>
 				</Label>
-      <Label layoutX="31.0" layoutY="162.0" prefHeight="55.0" prefWidth="182.0" text="&lt;Genero Pelicula&gt;" textFill="WHITE">
+      <Label fx:id="LabelGenero" layoutX="31.0" layoutY="162.0" prefHeight="55.0" prefWidth="182.0" text="&lt;Genero Pelicula&gt;" textFill="WHITE">
          <font>
             <Font name="Comic Sans MS" size="20.0" />
          </font>
       </Label>
-		<Hyperlink layoutX="142.0" layoutY="212.0" prefHeight="26.0" prefWidth="60.0" text="Resumen" />
+		<Hyperlink fx:id="TextResumen" layoutX="142.0" layoutY="212.0" onAction="#showResumen" prefHeight="26.0" prefWidth="60.0" text="Resumen" />
       <Label layoutX="45.0" layoutY="80.0" prefHeight="45.0" prefWidth="60.0" text="Hora:" textFill="WHITE">
          <font>
             <Font name="Bookman Old Style" size="17.0" />
          </font>
       </Label>
-      <Button fx:id="Entrar" layoutX="22.0" layoutY="208.0" mnemonicParsing="false" onAction="#ConectaBD" onMouseMoved="#Ilumina" prefHeight="26.0" prefWidth="68.0" style="-fx-background-color: #9BCF77;" text="Unirse" textFill="WHITE">
+      <Button fx:id="Entrar" layoutX="22.0" layoutY="208.0" mnemonicParsing="false" onAction="#unirseASala" prefHeight="26.0" prefWidth="68.0" style="-fx-background-color: #9BCF77;" text="Unirse" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>

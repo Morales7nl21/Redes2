@@ -10,6 +10,10 @@ import javax.swing.JOptionPane;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -17,9 +21,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import principal.Sala;
 
 public class ControladorCrearSala {
+	
+	static Stage crearS;
 	
 	public boolean TipoSala = false; //se inicializa en privada
 	public String NombreP;
@@ -93,6 +100,9 @@ public class ControladorCrearSala {
 	    	NombreP = NombrePel.getText();
 	    	if(NombreP.equals("")) {//si no hay nombre
 	    		throw new LanzarException(0);//lanza excepcion tipo 0
+	    		/*
+	    		 * se lanza excepcion para que no continue ejecutandose el codigo
+	    		 */
 	    	}
 	    	Resumen = Descripcion.getText();
 	    	if(Resumen.equals("")) {
@@ -121,7 +131,16 @@ public class ControladorCrearSala {
 	    		Generos.add("Sin Genero");
 	    	}
 	    	System.out.println("Llega");
-	    	//Sala salaN = new Sala(TipoSala,NombreP,Resumen,Generos);
+	    	Sala salaN = new Sala(TipoSala,NombreP,Resumen,Generos);
+	    	
+	    	//Regresa a la interfaz principal
+	    	ControladorPaginaPrincipal.pagP.close();
+	    	Parent root=new FXMLLoader().load(getClass().getResource("/PaginaPrincipal.fxml"));//7
+		    Scene scene= new Scene(root);
+	    	crearS = (Stage) ((Node)event.getSource( ) ).getScene().getWindow();
+	    	crearS.setScene(scene);
+	    	crearS.show();
+	    	
     	}
     	catch(LanzarException e) {
     		//System.out.println("Recibe excepcion");
@@ -172,6 +191,7 @@ public class ControladorCrearSala {
     }
     
     public class LanzarException extends Exception{
+    	//Clase que lanza excepciones 
     	public LanzarException(int n) {
     		switch(n) {
     			case 0: JOptionPane.showMessageDialog(null, "Falta nombre de la pelicula",
