@@ -5,6 +5,9 @@ import com.jfoenix.controls.JFXCheckBox;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import javax.swing.JOptionPane;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -87,9 +90,12 @@ public class ControladorCrearSala {
     void crearSala(ActionEvent event) {
     	//System.out.println("Finaliza creacion de sala");
     	NombreP = NombrePel.getText();
-    	/*if(NombreP.equals("")) {
+    	if(NombreP.equals("")) {
     		System.out.println("Nombre vacio");
-    	}*/
+    		JOptionPane.showMessageDialog(null, "Falta nombre de la pelicula",
+    				"Nombre de Pelicula",JOptionPane.WARNING_MESSAGE);
+    		//lanzar Exception
+    	}
     	Resumen = Descripcion.getText();
     	if(Resumen.equals("")) {
     		Resumen = "Sin Informacion";
@@ -116,7 +122,8 @@ public class ControladorCrearSala {
     	if(Generos.size() == 0){
     		Generos.add("Sin Genero");
     	}
-    	Sala salaN = new Sala(TipoSala,NombreP,Resumen,Generos);
+    	System.out.println("Llega");
+    	//Sala salaN = new Sala(TipoSala,NombreP,Resumen,Generos);
     }
 
     @FXML
