@@ -2,11 +2,15 @@ package copiaControladora;
 
 import com.gluonhq.charm.glisten.control.Icon;
 import com.jfoenix.controls.JFXCheckBox;
+
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -134,12 +138,12 @@ public class ControladorCrearSala {
 	    	Sala salaN = new Sala(TipoSala,NombreP,Resumen,Generos);
 	    	
 	    	//Regresa a la interfaz principal
-	    	ControladorPaginaPrincipal.pagP.close();
+	    	/*ControladorPaginaPrincipal.pagP.close();
 	    	Parent root=new FXMLLoader().load(getClass().getResource("/PaginaPrincipal.fxml"));//7
 		    Scene scene= new Scene(root);
 	    	crearS = (Stage) ((Node)event.getSource( ) ).getScene().getWindow();
 	    	crearS.setScene(scene);
-	    	crearS.show();
+	    	crearS.show();*/
 	    	
     	}
     	catch(LanzarException e) {
@@ -165,6 +169,15 @@ public class ControladorCrearSala {
     @FXML
     void selecVideo(ActionEvent event) {
     	//System.out.println("Seleccionar Video a trasmitir");
+    	JFileChooser jf = new JFileChooser();
+    	FileNameExtensionFilter filter = new FileNameExtensionFilter("videos","mp4","m4v","mov","mpg","mpeg","wmv");
+    	jf.setFileFilter(filter);;
+    	jf.setMultiSelectionEnabled(false);
+        int r = jf.showOpenDialog(null);
+        if (r == JFileChooser.APPROVE_OPTION) {
+        	File f = jf.getSelectedFile();
+        	LabelAr.setText(f.getName());
+        }
     }
 
     @FXML

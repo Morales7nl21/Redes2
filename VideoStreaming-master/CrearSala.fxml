@@ -49,8 +49,8 @@
       <TextField fx:id="NombrePel" layoutX="56.0" layoutY="211.0" prefHeight="26.0" prefWidth="401.0" promptText="Pelicula" />
       <TextArea fx:id="Descripcion" layoutX="54.0" layoutY="256.0" prefHeight="104.0" prefWidth="410.0" promptText="Sinopsis" />
       <Button fx:id="CrearSala" layoutX="121.0" layoutY="610.0" mnemonicParsing="false" onAction="#crearSala" prefHeight="32.0" prefWidth="277.0" text="Crear" />
-      <Button fx:id="SubirArchivo" layoutX="202.0" layoutY="541.0" mnemonicParsing="false" onAction="#selecVideo" text="Subir Archivo" />
-      <Label fx:id="LabelAr" layoutX="310.0" layoutY="557.0" prefHeight="21.0" prefWidth="59.0" text="     ..." textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="SubirArchivo" layoutX="126.0" layoutY="541.0" mnemonicParsing="false" onAction="#selecVideo" text="Subir Archivo" />
+      <Label fx:id="LabelAr" layoutX="232.0" layoutY="541.0" prefHeight="32.0" prefWidth="123.0" text="     ..." textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>
